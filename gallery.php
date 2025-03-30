@@ -159,7 +159,7 @@ if (is_dir($config['upload_dir'])) {
             
             $gallery_items[] = [
                 'name' => $file->getFilename(),
-                'url' => $config['upload_dir'] . $file->getFilename(),
+                'url' => $config['domain_url'] . 'img/' . $file->getFilename(),
                 'thumbnail' => getThumbnailUrl($file->getFilename()),
                 'size' => formatSize($file->getSize()),
                 'date' => date('Y-m-d H:i:s', $file->getMTime()),
