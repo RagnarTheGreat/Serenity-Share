@@ -428,7 +428,7 @@ function getThumbnailUrl($filename) {
     
     // If it's a video, return a default video thumbnail
     if (in_array($extension, ['mp4', 'webm'])) {
-        return 'assets/images/video-thumbnail.png';
+        return $config['domain_url'] . 'assets/images/video-thumbnail.png';
     }
     
     // For images, check if thumbnail exists
@@ -439,7 +439,7 @@ function getThumbnailUrl($filename) {
         createThumbnail($config['upload_dir'] . $filename, $thumbnailPath);
     }
     
-    return $thumbnailPath;
+    return $config['domain_url'] . 'thumbnails/' . $filename;
 }
 
 function createThumbnail($sourcePath, $thumbnailPath) {
