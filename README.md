@@ -16,9 +16,6 @@ Serenity Share is a free, open source, self-hosted file and image sharing soluti
 ## Requirements
 
 - PHP 7.4 or higher
-- MySQL/MariaDB database (optional)
-- Web server (Apache, Nginx, etc.)
-- Write permissions for upload directories
 
 ## Installation
 
@@ -27,17 +24,16 @@ Serenity Share is a free, open source, self-hosted file and image sharing soluti
 3. Edit `config.php` with your specific settings:
    - Update `domain_url` to point to your domain
    - Set a secure random string for `secret_key`
-   - Change the admin password (default is "password")
+   - Change the admin password (default is "password") using yourdomain/hash_password.php
    - Add your IP to `admin_ips` for admin area access
 4. Make sure upload directories are writable by your web server
 5. Access your site and login to the admin area at `/admin.php`
 
 ## ShareX Configuration
 
-1. Log in to the admin dashboard
-2. Go to the ShareX configuration section
-3. Download the configuration file
-4. Import it into ShareX
+1. Open the EDIT_BEFORE_LOADING.sxcu in any text editer and config to you
+2. Import it into ShareX
+3. Done
 
 ## Security Notes
 
