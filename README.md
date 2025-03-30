@@ -8,8 +8,6 @@ Serenity Share is a free, open source, self-hosted file and image sharing soluti
 - 📤 ShareX Integration - Ready to use with ShareX for quick screenshot and file uploads
 - 🔒 Password Protection - Secure your uploads with optional password protection
 - ⏱️ Expiring Links - Set expiration times for sensitive file sharing
-- 📱 Mobile Friendly - Responsive design works on all devices
-- ☁️ Multi-Upload - Upload multiple files simultaneously with drag & drop
 - 📦 ZIP Downloads - Download multiple files as a ZIP archive
 - 🚀 Easy Deployment - Simple installation process on any PHP-enabled web host
 
