@@ -1,0 +1,296 @@
+:root {
+    --bg-darker: #0f172a;
+    --bg-dark: #1e293b;
+    --text-color: #fff;
+    --primary-color: #3b82f6;
+    --primary-dark: #2563eb;
+    --accent-color: #60a5fa;
+    --text-light: #94a3b8;
+    --white: #fff;
+    --border-color: #334155;
+    --border-radius: 12px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, .1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, .2)
+}
+
+
+body {
+    background: linear-gradient(135deg, var(--bg-darker) 0, var(--bg-dark) 100%);
+    color: var(--text-color);
+    min-height: 100vh;
+    line-height: 1.6;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.container {
+    position: relative;
+    z-index: 10;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+
+.share-header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInDown .8s ease;
+}
+
+.share-header h1 {
+    font-size: 3em;
+    font-weight: 700;
+    margin-bottom: 15px;
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.share-header p {
+    color: var(--text-light);
+    font-size: 1.1em;
+}
+
+
+.share-info {
+    background: rgba(30, 30, 30, .6);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    margin-bottom: 40px;
+    animation: fadeInUp .8s ease;
+    box-shadow: var(--shadow-lg);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.info-item {
+    padding: 20px;
+    background: rgba(255, 255, 255, .03);
+    border-radius: 8px;
+    transition: transform .3s ease;
+}
+
+.info-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-light);
+    margin-bottom: 8px;
+}
+
+.info-value {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--white);
+}
+
+
+.files-container {
+    position: relative;
+    z-index: 11;
+    background: rgba(30, 30, 30, .95);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    padding: 25px;
+    animation: fadeInUp 1s ease;
+    box-shadow: var(--shadow-lg);
+    overflow: visible;
+}
+
+.files-header {
+    margin-bottom: 20px;
+}
+
+.files-header h2 {
+    font-size: 1.5em;
+    color: var(--white);
+    margin: 0;
+}
+
+.files-list {
+    position: static;
+    width: 100%;
+}
+
+.file-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: static;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(30, 30, 30, .95);
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    position: static;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.file-details {
+    flex: 1;
+}
+
+.file-name {
+    color: var(--white);
+    font-weight: 500;
+}
+
+.file-size {
+    color: var(--text-light);
+    font-size: 0.9em;
+}
+
+.no-files {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-light);
+    background: rgba(255, 255, 255, .03);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+
+.button,
+.download-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--primary-color);
+    color: var(--white);
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background .2s ease;
+}
+
+.button:hover,
+.download-button:hover {
+    background: var(--primary-dark);
+}
+
+.share-actions {
+    text-align: center;
+    margin: 30px 0;
+}
+
+/* Password Form */
+.password-form {
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 40px;
+    background: rgba(30, 30, 30, .6);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    text-align: center;
+    animation: fadeInUp .8s ease;
+    box-shadow: var(--shadow-lg);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .share-header h1 {
+        font-size: 2em;
+    }
+}
+
+.file-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(30, 30, 30, .95);
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.file-item i {
+    color: var(--text-light);
+    font-size: 1.2em;
+}
+
+.file-name {
+    flex: 1;
+    color: var(--white);
+    font-weight: 500;
+}
+
+.file-size {
+    color: var(--text-light);
+    margin-right: 15px;
+}
+
+.file-actions {
+    display: flex;
+    gap: 10px;
+}

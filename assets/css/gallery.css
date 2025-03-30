@@ -1,0 +1,124 @@
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px
+}
+
+.gallery-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px
+}
+
+.gallery-item {
+    background: var(--element-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform .3s ease;
+    position: relative
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px)
+}
+
+.gallery-list .gallery-item {
+    display: flex;
+    gap: 20px;
+    padding: 15px
+}
+
+.gallery-list .gallery-img-container {
+    width: 200px;
+    min-width: 200px;
+    aspect-ratio: 16/9
+}
+
+.gallery-list .gallery-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center
+}
+
+@media (max-width:768px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))
+    }
+
+    .gallery-list .gallery-item {
+        flex-direction: column;
+        gap: 10px
+    }
+
+    .gallery-list .gallery-img-container {
+        width: 100%
+    }
+
+    .gallery-controls {
+        flex-direction: column;
+        gap: 10px
+    }
+
+    .control-buttons {
+        width: 100%
+    }
+
+    .control-buttons .button {
+        flex: 1;
+        text-align: center
+    }
+}
+
+
+.delete-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--element-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.delete-dialog-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.delete-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.button-confirm-delete {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button-cancel {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
