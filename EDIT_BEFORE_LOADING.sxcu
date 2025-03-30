@@ -1,0 +1,19 @@
+﻿{
+    "Version": "13.7.0",
+    "Name": "NEW_CONFIG",
+    "DestinationType": "ImageUploader, FileUploader",
+    "RequestMethod": "POST",
+    "RequestURL": "https://YOURDOMAIN.COM/upload.php",
+    "Body": "MultipartFormData",
+    "FileFormName": "sharex",
+    "URL": "$json:url$",
+    "ThumbnailURL": "$json:url$",
+    "DeletionURL": "$json:deletion_url$",
+    "ErrorMessage": "$json:error$",
+    "Arguments": {
+        "secret_key": "RandomSecretKey-MAKE_SURE_IT_MATCHES_CONFIG.php"
+    },
+    "Headers": {
+        "User-Agent": "ShareX"
+    }
+} 
