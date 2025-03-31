@@ -1,25 +1,36 @@
 :root {
-    --bg-darker: #0f172a;
-    --bg-dark: #1e293b;
-    --text-color: #fff;
-    --primary-color: #3b82f6;
-    --primary-dark: #2563eb;
-    --accent-color: #60a5fa;
-    --text-light: #94a3b8;
-    --white: #fff;
-    --border-color: #334155;
-    --border-radius: 12px;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, .1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, .2)
+    --bg-color: #fff;
+    --text-color: #000;
+    --accent-color: #4f46e5;
+    --primary-color: #4f46e5;
+    --primary-dark: #4338ca;
+    --border-color: #e5e7eb;
+    --element-bg: #f8fafc;
+    --secondary-text: #64748b;
+    --danger-color: #dc2626;
+    --success-color: #059669;
+    --card-bg: var(--element-bg);
+    --border-radius: 8px;
 }
 
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #1f2937;
+        --text-color: #fff;
+        --border-color: #374151;
+        --element-bg: #111827;
+        --secondary-text: #9ca3af;
+    }
+}
 
 body {
-    background: linear-gradient(135deg, var(--bg-darker) 0, var(--bg-dark) 100%);
+    background: var(--bg-color);
     color: var(--text-color);
     min-height: 100vh;
     line-height: 1.6;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 20px;
 }
 
 #particles-js {
@@ -40,7 +51,6 @@ body {
     padding: 40px 20px;
 }
 
-
 .share-header {
     text-align: center;
     margin-bottom: 40px;
@@ -48,29 +58,25 @@ body {
 }
 
 .share-header h1 {
-    font-size: 3em;
+    font-size: 2.5em;
     font-weight: 700;
     margin-bottom: 15px;
-    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-color);
 }
 
 .share-header p {
-    color: var(--text-light);
+    color: var(--secondary-text);
     font-size: 1.1em;
 }
 
-
 .share-info {
-    background: rgba(30, 30, 30, .6);
-    backdrop-filter: blur(10px);
+    background: var(--element-bg);
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
     padding: 30px;
     margin-bottom: 40px;
     animation: fadeInUp .8s ease;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .info-grid {
@@ -81,36 +87,35 @@ body {
 
 .info-item {
     padding: 20px;
-    background: rgba(255, 255, 255, .03);
-    border-radius: 8px;
+    background: var(--bg-color);
+    border-radius: var(--border-radius);
     transition: transform .3s ease;
+    border: 1px solid var(--border-color);
 }
 
 .info-label {
     display: flex;
     align-items: center;
     gap: 10px;
-    color: var(--text-light);
+    color: var(--secondary-text);
     margin-bottom: 8px;
 }
 
 .info-value {
     font-size: 1.1em;
     font-weight: 600;
-    color: var(--white);
+    color: var(--text-color);
 }
-
 
 .files-container {
     position: relative;
     z-index: 11;
-    background: rgba(30, 30, 30, .95);
-    backdrop-filter: blur(10px);
+    background: var(--element-bg);
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
     padding: 25px;
     animation: fadeInUp 1s ease;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     overflow: visible;
 }
 
@@ -120,7 +125,7 @@ body {
 
 .files-header h2 {
     font-size: 1.5em;
-    color: var(--white);
+    color: var(--text-color);
     margin: 0;
 }
 
@@ -140,9 +145,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(30, 30, 30, .95);
+    background: var(--bg-color);
     padding: 15px 20px;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
     position: static;
 }
@@ -159,24 +164,24 @@ body {
 }
 
 .file-name {
-    color: var(--white);
+    color: var(--text-color);
     font-weight: 500;
 }
 
 .file-size {
-    color: var(--text-light);
-    font-size: 0.9em;
+    color: var(--secondary-text);
+    font-size: 0.8em;
+    margin-left: 8px;
 }
 
 .no-files {
     text-align: center;
     padding: 30px;
-    color: var(--text-light);
-    background: rgba(255, 255, 255, .03);
-    border-radius: 8px;
+    color: var(--secondary-text);
+    background: var(--bg-color);
+    border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
 }
-
 
 .button,
 .download-button {
@@ -185,11 +190,13 @@ body {
     gap: 8px;
     padding: 10px 20px;
     background: var(--primary-color);
-    color: var(--white);
-    border-radius: 6px;
+    color: #fff;
+    border-radius: var(--border-radius);
     text-decoration: none;
     font-weight: 500;
     transition: background .2s ease;
+    border: 0;
+    cursor: pointer;
 }
 
 .button:hover,
@@ -207,13 +214,12 @@ body {
     max-width: 400px;
     margin: 60px auto;
     padding: 40px;
-    background: rgba(30, 30, 30, .6);
-    backdrop-filter: blur(10px);
+    background: var(--element-bg);
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
     text-align: center;
     animation: fadeInUp .8s ease;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Animations */
@@ -251,46 +257,32 @@ body {
     }
 }
 
-/* Responsive */
+/* Responsive styles */
 @media (max-width: 768px) {
     .share-header h1 {
         font-size: 2em;
     }
-}
-
-.file-items {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.file-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    background: rgba(30, 30, 30, .95);
-    padding: 15px 20px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-}
-
-.file-item i {
-    color: var(--text-light);
-    font-size: 1.2em;
-}
-
-.file-name {
-    flex: 1;
-    color: var(--white);
-    font-weight: 500;
-}
-
-.file-size {
-    color: var(--text-light);
-    margin-right: 15px;
-}
-
-.file-actions {
-    display: flex;
-    gap: 10px;
+    
+    .file-items {
+        gap: 10px;
+    }
+    
+    .file-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .file-item i {
+        font-size: 1.5em;
+    }
+    
+    .file-name {
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    .file-size {
+        font-size: 0.8em;
+    }
 }
