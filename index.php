@@ -880,7 +880,7 @@
             <img src="assets/images/logo.png" alt="Serenity Share Logo" class="logo">
             <h1>Serenity Share</h1>
             <p>Free web-based file and image hosting solution. Easy to deploy, secure by design.</p>
-            <a href="#" class="button">Get Started</a>
+            <a href="https://github.com/RagnarTheGreat/Serenity-Share" class="button">Get Started</a>
         </div>
     </section>
 
@@ -941,13 +941,13 @@
             </div>
             <div class="compatibility-list">
                 <div class="compatibility-item recommended">
-                    <i class="fas fa-cloud"></i>
-                    <span>VPS</span>
+                    <i class="fas fa-server"></i>
+                    <span>DirectAdmin</span>
                     <div class="recommended-badge">Recommended</div>
                 </div>
                 <div class="compatibility-item">
-                    <i class="fas fa-home"></i>
-                    <span>Local Server</span>
+                    <i class="fas fa-cloud"></i>
+                    <span>VPS</span>
                 </div>
                 <div class="compatibility-item">
                     <i class="fas fa-network-wired"></i>
@@ -990,16 +990,6 @@
                     <p>Secure your uploads with optional password protection</p>
                 </div>
                 <div class="feature-card">
-                    <i class="fas fa-mobile-alt"></i>
-                    <h3>Mobile Friendly</h3>
-                    <p>Fully responsive design works on all devices</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-cloud"></i>
-                    <h3>Multi-Upload</h3>
-                    <p>Upload multiple files simultaneously with drag & drop</p>
-                </div>
-                <div class="feature-card">
                     <i class="fas fa-file-archive"></i>
                     <h3>ZIP Downloads</h3>
                     <p>Download multiple files as a ZIP archive</p>
@@ -1011,15 +1001,15 @@
     <section class="requirements">
         <div class="container">
             <div class="section-title">
-                <h2>System Requirements</h2>
-                <p>Minimal server requirements for optimal performance</p>
+                <h2>DirectAdmin Server Requirements</h2>
+                <p>Minimum server specifications for optimal performance</p>
             </div>
             <div class="requirements-list">
                 <ul>
-                <li>Node.js 16 or higher</li>
-                <li>Any modern operating system</li>
-                <li>Minimal server resources</li>
-                <li>Works great on budget VPS!</li>
+                <li>DirectAdmin 1.60 or higher</li>
+                <li>PHP 7.4+ with curl and zip extensions</li>
+                <li>MySQL 5.7+ or MariaDB 10.3+</li>
+                <li>Minimum 1GB RAM (2GB recommended)</li>
                 </ul>
             </div>
         </div>
@@ -1052,7 +1042,7 @@
                 <h2>Ready to Start Your Own File Hosting Service?</h2>
                 <p>Get started today with Serenity Share - 100% Free</p>
                 <div class="cta-buttons">
-                    <a href="#" class="button primary">
+                    <a href="https://github.com/RagnarTheGreat/Serenity-Share" class="button primary">
                         <i class="fab fa-github"></i> Download on GitHub
                     </a>
                 </div>
@@ -1064,11 +1054,8 @@
         <div class="container">
             <p>© 2024 Serenity Share - Self-Hosted File and Image Sharing Solution</p>
             <div class="social-links">
-                <a href="discord://discordapp.com/users/YOUR_DISCORD_ID" class="discord" title="Contact on Discord">
+                <a href="https://discord.gg/Bp9FqPEcuB" class="discord" title="Join our Discord">
                     <i class="fa-brands fa-discord"></i>
-                </a>
-                <a href="mailto:your-email@domain.com" class="email" title="Email me">
-                    <i class="fa-solid fa-envelope"></i>
                 </a>
             </div>
         </div>
