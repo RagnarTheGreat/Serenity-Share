@@ -24,6 +24,49 @@ try {
     $zipName = 'share_' . $shareId . '.zip';
     $zipPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $zipName;
 
+    // Check if we're downloading a single file
+    if (isset($_GET['file'])) {
+        // Find the file in metadata
+        $fileToDownload = null;
+        foreach ($metadata['files'] as $file) {
+            if ($file['name'] === $_GET['file']) {
+                $fileToDownload = $file;
+                break;
+            }
+        }
+        
+        if (!$fileToDownload) {
+            throw new Exception('File not found in share');
+        }
+        
+        // Get the file path
+        $filePath = $sharePath . DIRECTORY_SEPARATOR . $fileToDownload['path'];
+        if (!file_exists($filePath)) {
+            throw new Exception('File not found on server');
+        }
+        
+        // Get file mime type
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime_type = finfo_file($finfo, $filePath);
+        finfo_close($finfo);
+        
+        // Set headers
+        header('Content-Type: ' . $mime_type);
+        header('Content-Disposition: attachment; filename="' . basename($fileToDownload['name']) . '"');
+        header('Content-Length: ' . filesize($filePath));
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Pragma: no-cache');
+        
+        // Clear output buffer
+        ob_clean();
+        flush();
+        
+        // Send file
+        readfile($filePath);
+        exit;
+    }
+
+    // If we get here, we're downloading all files as a ZIP
     // Create new ZIP
     $zip = new ZipArchive();
     if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== TRUE) {
@@ -32,9 +75,9 @@ try {
 
     // Add files
     foreach ($metadata['files'] as $file) {
-        $filePath = $sharePath . DIRECTORY_SEPARATOR . $file['name'];
+        $filePath = $sharePath . DIRECTORY_SEPARATOR . $file['path'];
         if (file_exists($filePath)) {
-            $zip->addFile($filePath, basename($file['name']));
+            $zip->addFile($filePath, $file['path']);
         }
     }
 
