@@ -2,13 +2,14 @@
 Header set X-XSS-Protection "1; mode=block"
 Header set X-Frame-Options "SAMEORIGIN"
 Header set X-Content-Type-Options "nosniff"
-Header set Referrer-Policy "strict-origin-origin-when-cross-origin"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
 
 # Content Security Policy
 Header set Content-Security-Policy "default-src 'self'; \
-    script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; \
-    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; \
+    script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; \
+    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com; \
     img-src 'self' data: https://www.google.com; \
+    font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com https://cdnjs.cloudflare.com; \
     connect-src 'self' http://ip-api.com; \
     frame-ancestors 'none'; \
     form-action 'self';"
