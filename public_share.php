@@ -129,7 +129,7 @@ if (!function_exists('formatFileSize')) {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/public-share.css">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="assets/js/public-share.js"></script>
+    <script src="assets/js/public_share.js"></script>
 </head>
 <body>
     <script>
