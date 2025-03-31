@@ -1,7 +1,7 @@
 <?php
 
 $config = array(
-    'domain_url' => 'https://YOUR.DOMAIN.com',
+    'domain_url' => 'https://YOUR.DOMAIN.com/',
     'upload_dir' => __DIR__ . '/img/',
     'share_dir' => __DIR__ . '/shares/',
 'secret_key' => 'RandomSecretKey-MAKE_SURE_IT_MATCHES_SHARX_CONFIG', // make sure this matches the key in sharex config
@@ -12,7 +12,7 @@ $config = array(
     'max_expire_time' => 2592000,         // 30 days 
     'admin_username' => 'admin',
     // Updated password hash for "password" - generated using PHP's password_hash() function
-    'password' => '$2y$10$0DVCI187Z9tRXwCgvJ/6z.jL8jk.t12tWnMXj7QH8FM2rRVR8mOYC', // Default: "password" to change go to gomain/hash_password.php
+    'password' => '$2y$10$0DVCI187Z9tRXwCgvJ/6z.jL8jk.t12tWnMXj7QH8FM2rRVR8mOYC', // Default: "password" to change go to Domain.com/hash_password.php
     'debug' => false, // Set to true for debugging, then set back to false for production
     'admin_ips' => array(
         '127.0.0.1',     // localhost
