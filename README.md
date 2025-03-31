@@ -1,5 +1,3 @@
-![Serenity Share](assets/images/logo.png)
-
 ## Screenshots
 
 ![Dashboard](assets/images/dash.png)
