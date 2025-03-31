@@ -1,5 +1,9 @@
 # Serenity Share
 
+**I'm not a pro developer, so I know the code is crap.**
+
+This project was built with a focus on functionality rather than perfect code. It works, but the implementation might not follow best practices. Feel free to improve it!
+
 Serenity Share is a free, open source, self-hosted file and image sharing solution with ShareX integration. Easy to deploy on any web host.
 
 ## Features
