@@ -1,3 +1,14 @@
+![Serenity Share](assets/images/logo.png)
+
+## Screenshots
+
+![Dashboard](assets/images/dash.png)
+
+![File Sharing](assets/images/share.png)
+
+![Gallery View](assets/images/gallery.png)
+
+
 # Serenity Share
 
 **I'm not a pro developer, so I know the code is crap.**
