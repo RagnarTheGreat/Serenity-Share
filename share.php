@@ -6,6 +6,35 @@ require_once('templates/error.php');
 
 initSecureSession();
 
+// Set security headers
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https://www.google.com; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' http://ip-api.com; frame-ancestors 'none'; form-action 'self';");
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: SAMEORIGIN");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+
+// Function to get readable error message for upload errors
+function get_upload_error_message($error_code) {
+    switch ($error_code) {
+        case UPLOAD_ERR_INI_SIZE:
+            return 'The uploaded file exceeds the upload_max_filesize directive in php.ini';
+        case UPLOAD_ERR_FORM_SIZE:
+            return 'The uploaded file exceeds the MAX_FILE_SIZE directive in the HTML form';
+        case UPLOAD_ERR_PARTIAL:
+            return 'The uploaded file was only partially uploaded';
+        case UPLOAD_ERR_NO_FILE:
+            return 'No file was uploaded';
+        case UPLOAD_ERR_NO_TMP_DIR:
+            return 'Missing a temporary folder';
+        case UPLOAD_ERR_CANT_WRITE:
+            return 'Failed to write file to disk';
+        case UPLOAD_ERR_EXTENSION:
+            return 'A PHP extension stopped the file upload';
+        default:
+            return 'Unknown upload error';
+    }
+}
+
 if (!isset($_GET['id'])) {
     if (!validateSession()) {
         showError(403, 'Access Denied', 'Please log in to access the share management.');
@@ -67,62 +96,125 @@ if (isset($_POST['delete_share'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_share'])) {
-
+    // Start output buffering
+    ob_start();
+    
+    // Enable error logging
+    ini_set('display_errors', 0);
+    ini_set('log_errors', 1);
+    error_log("Starting share creation process");
+    
     set_time_limit(0);
     ignore_user_abort(true);
     
     try {
-        if (!isset($_FILES['files'])) {
-            throw new Exception("No files uploaded");
+        if (empty($_FILES) || !isset($_FILES['files'])) {
+            throw new Exception("No files uploaded or files array not set");
         }
 
+        error_log("Files received: " . print_r($_FILES, true));
+        
         $files = [];
         $uploadErrors = [];
         
-
         $shareId = bin2hex(random_bytes(16));
         $sharePath = $config['share_dir'] . '/' . $shareId;
+        
+        error_log("Share path: " . $sharePath);
+        
+        // Ensure share directory exists and is writable
         if (!file_exists($sharePath)) {
-            mkdir($sharePath, 0755, true);
+            error_log("Creating share directory: " . $sharePath);
+            if (!mkdir($sharePath, 0755, true)) {
+                $error = error_get_last();
+                throw new Exception("Failed to create share directory: " . ($error ? $error['message'] : 'Unknown error'));
+            }
         }
         
-
+        if (!is_writable($sharePath)) {
+            $permissions = fileperms($sharePath);
+            throw new Exception("Share directory is not writable. Permissions: " . decoct($permissions & 0777));
+        }
+        
+        // Log the start of file processing
+        error_log("Starting file processing for share: " . $shareId);
+        
+        // Check if files array is properly structured
+        if (!is_array($_FILES['files']['name'])) {
+            throw new Exception("Files array improperly formatted");
+        }
+        
         foreach ($_FILES['files']['error'] as $key => $error) {
+            $fileName = isset($_FILES['files']['name'][$key]) ? $_FILES['files']['name'][$key] : 'unknown';
+            error_log("Processing file: " . $fileName . " (error code: " . $error . ")");
+            
             if ($error === UPLOAD_ERR_OK) {
                 $tmpName = $_FILES['files']['tmp_name'][$key];
-                $fileName = $_FILES['files']['name'][$key];
+                
+                if (!file_exists($tmpName)) {
+                    $uploadErrors[] = "Temporary file does not exist: " . $tmpName;
+                    error_log("Error: Temporary file does not exist: " . $tmpName);
+                    continue;
+                }
                 
                 if (!is_uploaded_file($tmpName)) {
                     $uploadErrors[] = "Invalid upload attempt for file: " . $fileName;
+                    error_log("Error: Invalid upload attempt for file: " . $fileName);
                     continue;
                 }
                 
-
-                $destination = $sharePath . '/' . $fileName;
+                // Handle folder structure
+                $relativePath = isset($_POST['relative_path'][$key]) ? $_POST['relative_path'][$key] : '';
+                $destination = $sharePath;
+                
+                if ($relativePath) {
+                    error_log("File has relative path: " . $relativePath);
+                    // Create folder structure
+                    $folders = explode('/', dirname($relativePath));
+                    foreach ($folders as $folder) {
+                        if ($folder && $folder !== '.') {
+                            $destination .= '/' . $folder;
+                            if (!file_exists($destination)) {
+                                error_log("Creating directory: " . $destination);
+                                if (!mkdir($destination, 0755, true)) {
+                                    $error = error_get_last();
+                                    throw new Exception("Failed to create directory: " . $destination . " - " . ($error ? $error['message'] : 'Unknown error'));
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                $destination .= '/' . basename($fileName);
+                error_log("Moving file to: " . $destination);
+                
                 if (!move_uploaded_file($tmpName, $destination)) {
-                    $uploadErrors[] = "Failed to move uploaded file: " . $fileName;
+                    $error = error_get_last();
+                    $uploadErrors[] = "Failed to move uploaded file: " . $fileName . " - " . ($error ? $error['message'] : 'Unknown error');
+                    error_log("Error: Failed to move uploaded file: " . $fileName . " - " . ($error ? $error['message'] : 'Unknown error'));
                     continue;
                 }
                 
-
                 $files[] = [
                     'name' => $fileName,
                     'type' => $_FILES['files']['type'][$key],
                     'size' => $_FILES['files']['size'][$key],
-                    'path' => $fileName
+                    'path' => $relativePath ? $relativePath : $fileName
                 ];
                 
-                error_log("Added file to share: " . $fileName); // Debug logging
+                error_log("Added file to share: " . ($relativePath ? $relativePath : $fileName));
             } else {
-                $uploadErrors[] = "Upload error for file {$_FILES['files']['name'][$key]}: " . get_upload_error_message($error);
+                $errorMessage = get_upload_error_message($error);
+                $uploadErrors[] = "Upload error for file {$fileName}: " . $errorMessage;
+                error_log("Error: Upload error for file {$fileName}: " . $errorMessage);
             }
         }
         
         if (empty($files)) {
             throw new Exception("No valid files uploaded. Errors: " . implode(", ", $uploadErrors));
         }
-
-        error_log("Total files processed: " . count($files)); // Debug logging
+        
+        error_log("Total files processed: " . count($files));
         
         // Create metadata and finish share creation
         $expiration = isset($_POST['expiration']) ? intval($_POST['expiration']) : 7;
@@ -140,30 +232,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_share'])) {
         
         // Save metadata
         $metadataPath = $sharePath . '/metadata.json';
+        error_log("Saving metadata to: " . $metadataPath);
         if (!file_put_contents($metadataPath, json_encode($metadata))) {
-            throw new Exception("Failed to save share metadata");
+            $error = error_get_last();
+            throw new Exception("Failed to save share metadata: " . ($error ? $error['message'] : 'Unknown error'));
         }
         
-        error_log("Share created successfully with " . count($files) . " files"); // Debug logging
+        error_log("Share created successfully with " . count($files) . " files");
         
-        echo json_encode([
+        // Clear any previous output
+        ob_clean();
+        
+        // Send JSON response
+        header('Content-Type: application/json');
+        $response = [
             'success' => true,
             'data' => [
                 'id' => $shareId,
                 'url' => $config['domain_url'] . 'public_share.php?id=' . $shareId,
-                'fileCount' => count($files) // Add file count to response
+                'fileCount' => count($files)
             ]
-        ]);
+        ];
+        error_log("Sending success response: " . json_encode($response));
+        echo json_encode($response);
+        exit;
         
     } catch (Exception $e) {
         error_log("Share creation error: " . $e->getMessage());
+        
+        // Clear any previous output
+        ob_clean();
+        
+        // Send error response
+        header('Content-Type: application/json');
         http_response_code(400);
-        echo json_encode([
+        $response = [
             'success' => false,
             'error' => $e->getMessage()
-        ]);
+        ];
+        error_log("Sending error response: " . json_encode($response));
+        echo json_encode($response);
+        exit;
     }
-    exit;
 }
 
 // Handle GET requests next
@@ -250,7 +360,7 @@ if (isset($_GET['id'])) {
         <title>Share Management</title>
         <link rel="stylesheet" href="assets/css/style.css">
         <link rel="stylesheet" href="assets/css/share.css">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -329,8 +439,24 @@ if (isset($_GET['id'])) {
 }
 
 if (isset($_GET['file'])) {
-    $filename = basename($_GET['file']);
-    $filepath = $sharePath . '/' . $_GET['file'];
+    // Find the file metadata first to get the correct path
+    $fileKey = null;
+    $fileData = null;
+    
+    foreach ($metadata['files'] as $index => $file) {
+        if ($file['name'] === $_GET['file']) {
+            $fileKey = $index;
+            $fileData = $file;
+            break;
+        }
+    }
+    
+    if (!$fileData) {
+        die("File not found in share.");
+    }
+    
+    $filename = $fileData['name'];
+    $filepath = $sharePath . '/' . $fileData['path'];
     
     // Validate that the file exists and is within the share directory
     if (!file_exists($filepath) || !is_file($filepath) || 
@@ -394,7 +520,7 @@ if (isset($_GET['download_all'])) {
     <title>Share Management</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/share.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -409,44 +535,57 @@ if (isset($_GET['download_all'])) {
         </div>
 
         <div class="section">
-            <!-- Replace the dropzone with a simple upload button -->
-            <div class="upload-section">
-                <div class="upload-button-container">
-                    <input type="file" id="fileInput" multiple style="display: none;">
-                    <button class="button button-primary" onclick="document.getElementById('fileInput').click()">
-                        <i class="fas fa-upload"></i> Upload Files
-                    </button>
-                </div>
-            </div>
+            <div class="share-form">
+                <h2>Create New Share</h2>
+                <form id="shareForm" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="create_share" value="1">
+                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                    
+                    <div class="form-group">
+                        <label for="files">Select Files or Folders:</label>
+                        <div class="upload-zone" id="drop-zone">
+                            <div class="upload-message">
+                                <span class="icon">📁</span>
+                                <p>Drag and drop files or folders here</p>
+                                <p>or</p>
+                                <div class="upload-buttons">
+                                    <button type="button" class="button button-primary" onclick="document.getElementById('file-input').click()">Choose Files</button>
+                                    <button type="button" class="button button-primary" onclick="document.getElementById('folder-input').click()">Choose Folder</button>
+                                </div>
+                                <input type="file" id="file-input" name="files[]" multiple style="display: none" onchange="handleFileSelect(this)">
+                                <input type="file" id="folder-input" name="files[]" webkitdirectory directory style="display: none" onchange="handleFolderSelect(this)">
+                            </div>
+                        </div>
+                        <div id="selected-files" class="selected-files"></div>
+                    </div>
 
-            <!-- Keep the upload options -->
-            <div class="upload-options">
-                <div class="form-group">
-                    <label>Expiration</label>
-                    <select id="expiration" name="expiration">
-                        <option value="-1" selected>Never expire</option>
-                        <option value="1">1 day</option>
-                        <option value="7">7 days</option>
-                        <option value="30">30 days</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Password Protection</label>
-                    <input type="password" id="sharePassword" placeholder="Optional">
-                </div>
-                <button class="button button-primary" onclick="uploadFiles()">
-                    <i class="fas fa-share"></i> Create Share
-                </button>
-            </div>
+                    <div class="form-group">
+                        <label for="expiration">Share Expiration:</label>
+                        <select name="expiration" id="expiration">
+                            <option value="1">1 Day</option>
+                            <option value="7" selected>7 Days</option>
+                            <option value="30">30 Days</option>
+                            <option value="-1">Never</option>
+                        </select>
+                    </div>
 
-            <div id="uploadProgress" class="upload-progress hidden">
-                <div class="progress-info">
-                    <span id="currentFile">Preparing upload...</span>
-                    <span id="progressPercent">0%</span>
-                </div>
-                <div class="progress-bar">
-                    <div id="progressBar" style="width: 0%"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="password">Password Protection (Optional):</label>
+                        <input type="password" name="password" id="password" placeholder="Enter password to protect share">
+                    </div>
+
+                    <div id="uploadProgress" class="upload-progress hidden">
+                        <div class="progress-info">
+                            <span id="currentFile">Preparing upload...</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="progressBar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="button button-primary">Create Share</button>
+                </form>
             </div>
 
             <div class="shares-list">
