@@ -30,6 +30,10 @@ define('THUMBNAIL_SIZE', 200);
 define('THUMBNAILS_DIR', 'thumbnails/');
 define('ALLOWED_TYPES', ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'webm']);
 
+// Pagination constants
+define('ITEMS_PER_PAGE', 24); // Number of items per page
+define('MAX_PAGINATION_LINKS', 10); // Maximum number of pagination links to show
+
 // Add basic error handling
 if ($config['debug']) {
     ini_set('display_errors', 1);
@@ -127,12 +131,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_files'])) {
         $_SESSION['error'] = implode("\n", $errors);
     }
 
-    header('Location: gallery.php');
+    // Preserve current page after deletion
+    $return_page = isset($_POST['return_page']) ? intval($_POST['return_page']) : 1;
+    $redirect_url = 'gallery.php';
+    if ($return_page > 1) {
+        $redirect_url .= '?page=' . $return_page;
+    }
+    
+    header('Location: ' . $redirect_url);
     exit;
 }
 
-// Get gallery items
-$gallery_items = [];
+// Get pagination parameters
+$current_page = max(1, intval($_GET['page'] ?? 1));
+$items_per_page = ITEMS_PER_PAGE;
+
+// Get all gallery items for counting and sorting
+$all_gallery_items = [];
 $gallery_stats = [
     'file_count' => 0,
     'total_size' => 0,
@@ -157,9 +172,9 @@ if (is_dir($config['upload_dir'])) {
             }
             $gallery_stats['file_types'][$extension]++;
             
-            $gallery_items[] = [
+            $all_gallery_items[] = [
                 'name' => $file->getFilename(),
-                'url' => $config['domain_url'] . 'img/' . $file->getFilename(),
+                'url' => $config['upload_dir'] . $file->getFilename(),
                 'thumbnail' => getThumbnailUrl($file->getFilename()),
                 'size' => formatSize($file->getSize()),
                 'date' => date('Y-m-d H:i:s', $file->getMTime()),
@@ -171,9 +186,27 @@ if (is_dir($config['upload_dir'])) {
 }
 
 // Sort files by date (newest first)
-usort($gallery_items, function($a, $b) {
+usort($all_gallery_items, function($a, $b) {
     return strtotime($b['date']) - strtotime($a['date']);
 });
+
+// Calculate pagination
+$total_items = count($all_gallery_items);
+$total_pages = max(1, ceil($total_items / $items_per_page));
+$current_page = min($current_page, $total_pages); // Ensure current page doesn't exceed total pages
+
+// Get items for current page
+$offset = ($current_page - 1) * $items_per_page;
+$gallery_items = array_slice($all_gallery_items, $offset, $items_per_page);
+
+// Calculate pagination links
+$start_page = max(1, $current_page - floor(MAX_PAGINATION_LINKS / 2));
+$end_page = min($total_pages, $start_page + MAX_PAGINATION_LINKS - 1);
+
+// Adjust start_page if we're near the end
+if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
+    $start_page = max(1, $end_page - MAX_PAGINATION_LINKS + 1);
+}
 
 // Start HTML output
 ?>
@@ -182,7 +215,7 @@ usort($gallery_items, function($a, $b) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery</title>
+    <title>Gallery - Page <?php echo $current_page; ?></title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/gallery.css">
 </head>
@@ -190,6 +223,12 @@ usort($gallery_items, function($a, $b) {
     <div class="container">
         <div class="header">
             <h1>Image Gallery</h1>
+            <div class="header-info">
+                <span class="page-info">
+                    Page <?php echo $current_page; ?> of <?php echo $total_pages; ?> 
+                    (<?php echo number_format($total_items); ?> total files)
+                </span>
+            </div>
             <a href="admin.php" class="button button-primary">Back to Dashboard</a>
         </div>
 
@@ -223,7 +262,7 @@ usort($gallery_items, function($a, $b) {
         <div class="gallery-stats">
             <div class="stat-card">
                 <div class="stat-title">📁 Total Files</div>
-                <div class="stat-value"><?php echo $gallery_stats['file_count']; ?></div>
+                <div class="stat-value"><?php echo number_format($gallery_stats['file_count']); ?></div>
             </div>
             <div class="stat-card">
                 <div class="stat-title">💾 Storage Used</div>
@@ -239,39 +278,87 @@ usort($gallery_items, function($a, $b) {
                     <?php endforeach; ?>
                 </div>
             </div>
+            <div class="stat-card">
+                <div class="stat-title">📄 Current Page</div>
+                <div class="stat-value">
+                    <?php echo count($gallery_items); ?> of <?php echo $items_per_page; ?> items
+                </div>
+            </div>
         </div>
 
+
+
         <div class="gallery-grid">
-            <?php foreach ($gallery_items as $image): ?>
-                <div class="gallery-item" data-name="<?php echo htmlspecialchars($image['name']); ?>" data-date="<?php echo $image['date']; ?>">
-                    <input type="checkbox" class="file-checkbox" value="<?php echo htmlspecialchars($image['name']); ?>" onchange="updateDeleteButton()">
-                    <div class="gallery-media">
-                        <?php if ($image['is_video']): ?>
-                            <a href="<?php echo htmlspecialchars($image['url']); ?>" target="_blank">
-                                <video src="<?php echo htmlspecialchars($image['url']); ?>" 
-                                       class="gallery-video" 
-                                       preload="metadata"></video>
-                            </a>
-                        <?php else: ?>
-                            <a href="<?php echo htmlspecialchars($image['url']); ?>" target="_blank">
-                                <img src="<?php echo htmlspecialchars($image['thumbnail']); ?>" 
-                                     loading="lazy" 
-                                     class="gallery-img" 
-                                     alt="<?php echo htmlspecialchars($image['name']); ?>">
-                            </a>
+            <?php if (empty($gallery_items)): ?>
+                <div class="no-items">
+                    <div class="no-items-content">
+                        <span class="no-items-icon">📁</span>
+                        <h3>No files found</h3>
+                        <p>There are no files to display on this page.</p>
+                        <?php if ($current_page > 1): ?>
+                            <a href="?page=1" class="button button-primary">Go to First Page</a>
                         <?php endif; ?>
                     </div>
-                    <div class="gallery-info">
-                        <div class="filename"><?php echo htmlspecialchars($image['name']); ?></div>
-                        <div class="filesize">Size: <?php echo $image['size']; ?></div>
-                        <div class="filedate">Date: <?php 
-                            $date = new DateTime($image['date']);
-                            echo $date->format('Y-m-d H:i:s'); 
-                        ?></div>
-                    </div>
                 </div>
-            <?php endforeach; ?>
+            <?php else: ?>
+                <?php foreach ($gallery_items as $image): ?>
+                    <div class="gallery-item" data-name="<?php echo htmlspecialchars($image['name']); ?>" data-date="<?php echo $image['date']; ?>">
+                        <input type="checkbox" class="file-checkbox" value="<?php echo htmlspecialchars($image['name']); ?>" onchange="updateDeleteButton()">
+                        <div class="gallery-media">
+                            <?php if ($image['is_video']): ?>
+                                <a href="<?php echo htmlspecialchars($image['url']); ?>" target="_blank">
+                                    <video src="<?php echo htmlspecialchars($image['url']); ?>" 
+                                           class="gallery-video" 
+                                           preload="metadata"></video>
+                                </a>
+                            <?php else: ?>
+                                <a href="<?php echo htmlspecialchars($image['url']); ?>" target="_blank">
+                                    <img src="<?php echo htmlspecialchars($image['thumbnail']); ?>" 
+                                         loading="lazy" 
+                                         class="gallery-img" 
+                                         alt="<?php echo htmlspecialchars($image['name']); ?>">
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                        <div class="gallery-info">
+                            <div class="filename"><?php echo htmlspecialchars($image['name']); ?></div>
+                            <div class="filesize">Size: <?php echo $image['size']; ?></div>
+                            <div class="filedate">Date: <?php 
+                                $date = new DateTime($image['date']);
+                                echo $date->format('Y-m-d H:i:s'); 
+                            ?></div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
+
+        <?php if ($total_pages > 1): ?>
+        <div class="pagination-bottom">
+            <div class="pagination">
+                <?php if ($current_page > 1): ?>
+                    <a href="?page=1" class="pagination-link">« First</a>
+                    <a href="?page=<?php echo $current_page - 1; ?>" class="pagination-link">‹ Previous</a>
+                <?php endif; ?>
+
+                <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
+                    <?php if ($i == $current_page): ?>
+                        <span class="pagination-link pagination-current"><?php echo $i; ?></span>
+                    <?php else: ?>
+                        <a href="?page=<?php echo $i; ?>" class="pagination-link"><?php echo $i; ?></a>
+                    <?php endif; ?>
+                <?php endfor; ?>
+
+                <?php if ($current_page < $total_pages): ?>
+                    <a href="?page=<?php echo $current_page + 1; ?>" class="pagination-link">Next ›</a>
+                    <a href="?page=<?php echo $total_pages; ?>" class="pagination-link">Last »</a>
+                <?php endif; ?>
+            </div>
+            <div class="pagination-info">
+                Showing <?php echo $offset + 1; ?>-<?php echo min($offset + $items_per_page, $total_items); ?> of <?php echo number_format($total_items); ?> files
+            </div>
+        </div>
+        <?php endif; ?>
 
         <div id="upload-dialog" class="upload-dialog" style="display: none;">
             <div class="upload-content">
