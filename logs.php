@@ -29,8 +29,10 @@ function checkIPWhitelist() {
     }
 }
 
-// Call the function
-checkIPWhitelist();
+// Check IP whitelist if enabled in config
+if ($config['ip_whitelist_enabled']) {
+    checkIPWhitelist();
+}
 
 // Only enable error reporting if debug mode is true
 if ($config['debug']) {
