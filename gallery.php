@@ -61,8 +61,10 @@ if (!is_writable(THUMBNAILS_DIR)) {
     exit;
 }
 
-// Check IP whitelist
-checkIPWhitelist();
+// Check IP whitelist if enabled in config
+if ($config['ip_whitelist_enabled']) {
+    checkIPWhitelist();
+}
 
 // IP Whitelist Check
 function checkIPWhitelist() {
@@ -174,7 +176,7 @@ if (is_dir($config['upload_dir'])) {
             
             $all_gallery_items[] = [
                 'name' => $file->getFilename(),
-                'url' => $config['upload_dir'] . $file->getFilename(),
+                'url' => $config['domain_url'] . $config['upload_dir'] . $file->getFilename(),
                 'thumbnail' => getThumbnailUrl($file->getFilename()),
                 'size' => formatSize($file->getSize()),
                 'date' => date('Y-m-d H:i:s', $file->getMTime()),
