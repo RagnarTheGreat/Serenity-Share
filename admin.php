@@ -48,8 +48,8 @@ function checkIPWhitelistOptimized() {
     return true;
 }
 
-// Make sure this is called early in the script
-if (!checkIPWhitelistOptimized()) {
+// Check IP whitelist if enabled in config
+if ($config['ip_whitelist_enabled'] && !checkIPWhitelistOptimized()) {
     exit;
 }
 
@@ -129,8 +129,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username']) && isset(
         global $config;
         
         // Get credentials directly from config
-        $valid_username = $config['admin_username']; 
-        $valid_password = $config['password'];       
+        $valid_username = $config['admin_username'];  // This matches your config.php
+        $valid_password = $config['password'];        // This matches your config.php
         
         $username = validateInput($_POST['username']);
         $password = $_POST['password'];
