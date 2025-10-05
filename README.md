@@ -6,7 +6,8 @@
 
 ![Gallery View](assets/images/gallery.png)
 
-![Discordlog](assets/images/Discord_JmpQF3inS7.png
+![Discord Notifications](assets/images/Discord_JmpQF3inS7.png)
+
 
 
 
