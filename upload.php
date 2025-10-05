@@ -100,10 +100,14 @@ try {
         throw new Exception("Failed to move uploaded file");
     }
 
+    $fileUrl = $config['domain_url'] . 'img/' . $filename;
+    
+    // Send Discord notification
+    sendDiscordNotification($filename, $fileUrl);
 
     echo json_encode([
         'status' => true,
-        'url' => $config['domain_url'] . 'img/' . $filename,
+        'url' => $fileUrl,
         'deletion_url' => null,
         'error' => null
     ]);
