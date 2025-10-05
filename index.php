@@ -901,6 +901,11 @@
                 <h3>Image Gallery</h3>
                 <p>Beautiful gallery to showcase your uploads</p>
             </div>
+            <div class="floating-card">
+                <i class="fab fa-discord"></i>
+                <h3>Discord Notifications</h3>
+                <p>Real-time notifications in Discord when files are uploaded</p>
+            </div>
         </div>
     </section>
 
@@ -928,6 +933,12 @@
                         <span>Gallery View</span>
                     </div>
                     <img src="assets/images/gallery.png" alt="Analytics Dashboard">
+                </div>
+                <div class="screenshot-item" onclick="openModal('assets/images/Discord_JmpQF3inS7.png')">
+                    <div class="screenshot-overlay">
+                        <span>Discord Notifications</span>
+                    </div>
+                    <img src="assets/images/Discord_JmpQF3inS7.png" alt="Discord Notifications">
                 </div>
             </div>
         </div>
@@ -993,6 +1004,11 @@
                     <i class="fas fa-file-archive"></i>
                     <h3>ZIP Downloads</h3>
                     <p>Download multiple files as a ZIP archive</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fab fa-discord"></i>
+                    <h3>Discord Notifications</h3>
+                    <p>Get real-time notifications in Discord with rich embeds and image previews</p>
                 </div>
             </div>
         </div>
