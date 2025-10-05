@@ -527,5 +527,120 @@ function createThumbnail($sourcePath, $thumbnailPath) {
 
     return $success;
 }
+
+// Enhanced Discord webhook function with rich embeds
+function sendDiscordNotification($filename, $fileUrl) {
+    global $config;
+    
+    // Check if Discord notifications are enabled
+    if (!isset($config['discord_notifications']) || !$config['discord_notifications']) {
+        return;
+    }
+    
+    // Check if webhook URL is set
+    if (empty($config['discord_webhook_url'])) {
+        return;
+    }
+    
+    // Get domain from config
+    $domain = parse_url($config['domain_url'], PHP_URL_HOST);
+    
+    // Get file info
+    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    $filePath = $config['upload_dir'] . $filename;
+    $fileSize = file_exists($filePath) ? filesize($filePath) : 0;
+    
+    // Determine file type and emoji
+    $fileEmoji = '📁';
+    $fileDescription = 'File';
+    $color = 0x5865F2; // Discord blue
+    
+    if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
+        $fileEmoji = '🖼️';
+        $fileDescription = 'Image';
+        $color = 0x00ff00; // Green for images
+    } elseif (in_array($extension, ['mp4', 'webm'])) {
+        $fileEmoji = '🎥';
+        $fileDescription = 'Video';
+        $color = 0xff6b6b; // Red for videos
+    }
+    
+    // Get visitor info
+    $visitorIp = $_SERVER['REMOTE_ADDR'] ?? 'Unknown';
+    $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown';
+    $isMobile = preg_match('/(android|iphone|ipad|mobile)/i', strtolower($userAgent));
+    $deviceType = $isMobile ? '📱 Mobile' : '💻 Desktop';
+    
+    // Create rich embed
+    $embed = [
+        'title' => '📤 New File Uploaded',
+        'color' => $color,
+        'fields' => [
+            [
+                'name' => '🌐 Domain',
+                'value' => $domain,
+                'inline' => true
+            ],
+            [
+                'name' => '📄 Filename',
+                'value' => "`{$filename}`",
+                'inline' => true
+            ],
+            [
+                'name' => '📊 File Type',
+                'value' => "{$fileEmoji} {$fileDescription} ({$extension})",
+                'inline' => true
+            ],
+            [
+                'name' => '📏 File Size',
+                'value' => formatSize($fileSize),
+                'inline' => true
+            ],
+            [
+                'name' => '🖥️ Device',
+                'value' => $deviceType,
+                'inline' => true
+            ],
+            [
+                'name' => '🔗 Direct Link',
+                'value' => "[Click to view]({$fileUrl})",
+                'inline' => true
+            ]
+        ],
+        'timestamp' => date('c'),
+        'footer' => [
+            'text' => 'Serenity Share • Upload Bot',
+            'icon_url' => 'https://cdn.discordapp.com/emojis/1234567890123456789.png'
+        ]
+    ];
+    
+    // Add image preview for image files
+    if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
+        $embed['image'] = [
+            'url' => $fileUrl
+        ];
+    }
+    
+    // Send to Discord with rich embed
+    $data = [
+        'username' => 'Upload Bot',
+        'avatar_url' => 'https://cdn.discordapp.com/emojis/1234567890123456789.png',
+        'embeds' => [$embed]
+    ];
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $config['discord_webhook_url']);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'User-Agent: Serenity-Share/1.0'
+    ]);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+    curl_exec($ch);
+    curl_close($ch);
+}
 ?>
 
