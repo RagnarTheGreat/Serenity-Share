@@ -240,6 +240,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_share'])) {
         
         error_log("Share created successfully with " . count($files) . " files");
         
+        // Send Discord webhook notification for file shares
+        $shareUrl = $config['domain_url'] . 'public_share.php?id=' . $shareId;
+        $additionalData = [
+            'share_id' => $shareId,
+            'file_count' => count($files),
+            'expires' => $expiration === -1 ? 'Never' : $expiration . ' days'
+        ];
+        
+        // Send webhook for the first file in the share (as a representative)
+        if (!empty($files)) {
+            $firstFile = $files[0];
+            sendDiscordWebhook($firstFile['name'], $shareUrl, 'share', $additionalData);
+        }
+        
         // Clear any previous output
         ob_clean();
         
@@ -249,7 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_share'])) {
             'success' => true,
             'data' => [
                 'id' => $shareId,
-                'url' => $config['domain_url'] . 'public_share.php?id=' . $shareId,
+                'url' => $shareUrl,
                 'fileCount' => count($files)
             ]
         ];
