@@ -106,6 +106,72 @@ Set `'discord_notifications' => false` in config.php
 2. Import it into ShareX
 3. Done
 
+## Troubleshooting
+
+### ShareX Upload Error 500
+
+If you're getting Error 500 when uploading from ShareX, here are the most common causes and solutions:
+
+#### 1. **Directory Permissions**
+Make sure upload directories are writable:
+```bash
+chmod 755 img/
+chmod 755 shares/
+chmod 755 logs/
+```
+
+#### 2. **PHP Upload Limits**
+Check your PHP configuration in `php.ini`:
+```ini
+upload_max_filesize = 100M
+post_max_size = 100M
+max_execution_time = 300
+memory_limit = 256M
+```
+
+#### 3. **File Size Limits**
+Update your `config.php` if needed:
+```php
+'max_file_size' => 100 * 1024 * 1024,  // 100MB
+```
+
+#### 4. **Missing PHP Extensions**
+Ensure these PHP extensions are installed:
+- `fileinfo` - For file type detection
+- `gd` or `imagick` - For image processing
+- `zip` - For ZIP downloads
+
+#### 5. **Debug Mode**
+Enable debug mode in `config.php` to see detailed error messages:
+```php
+'debug' => true,
+```
+Then check `/logs/php_errors.log` for specific error details.
+
+#### 6. **ShareX Configuration**
+Verify your ShareX configuration:
+- URL should point to `yourdomain.com/upload.php`
+- Method should be `POST`
+- File form name should be `file`
+- Response should be `URL`
+
+#### 7. **Server Error Logs**
+Check your web server error logs (usually in `/var/log/apache2/error.log` or `/var/log/nginx/error.log`)
+
+#### 8. **Quick Test**
+Test upload functionality directly:
+1. Go to `yourdomain.com/upload.php` in your browser
+2. Try uploading a small image file
+3. If this works, the issue is with ShareX configuration
+4. If this fails, the issue is server-side
+
+### Common Error Messages
+
+- **"Directory must be writable"** → Fix directory permissions
+- **"File too large"** → Increase PHP upload limits
+- **"Invalid file type"** → Check `allowed_types` in config.php
+- **"Memory exhausted"** → Increase `memory_limit` in php.ini
+
 ## Security Notes
 
 - Change the default admin password immediately
