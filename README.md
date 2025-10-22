@@ -41,10 +41,34 @@ Serenity Share is a free, open source, self-hosted file and image sharing soluti
 3. Edit `config.php` with your specific settings:
    - Update `domain_url` to point to your domain
    - Set a secure random string for `secret_key`
-   - Change the admin password (default is "password") using yourdomain/hash_password.php
+   - Change the admin password using the built-in password hash generator at `yourdomain.com/hash_password.php`
    - Add your IP to `admin_ips` for admin area access
 4. Make sure upload directories are writable by your web server
 5. Access your site and login to the admin area at `/admin.php`
+
+## Password Hash Generator
+
+Serenity Share includes a built-in password hash generator to help you create secure password hashes for the admin area.
+
+### How to use:
+
+1. **Via Web Interface:**
+   - Navigate to `yourdomain.com/hash_password.php`
+   - Enter your desired password
+   - Select your preferred hashing algorithm (default is recommended)
+   - Click "Generate Hash"
+   - Copy the generated hash
+
+2. **Update config.php:**
+   - Replace the `password` value in `config.php` with the generated hash
+   - Example: `'password' => '$2y$10$gajQExEjPRHasgkPezXZX.fq0OicPnNLLy7sTCliuAGKDkrlHW4jm',`
+
+3. **Command Line Alternative:**
+   ```bash
+   php -r "echo password_hash('your_password_here', PASSWORD_DEFAULT);"
+   ```
+
+**Security Note:** Never store plain text passwords in your configuration files. Always use the hash generator to create secure password hashes.
 
 ## Discord Notifications Setup
 
