@@ -28,9 +28,11 @@ A free, open source, self-hosted file and image sharing solution with ShareX int
 
 1. Download the files to your web server
 2. Edit `config.php` with your domain and settings
-3. Access `/admin.php` to manage your files
-4. Import `EDIT_BEFORE_LOADING.sxcu` into ShareX
-5. Start uploading!
+3. Generate a password hash using `yourdomain/hash_password.php`
+4. Update the admin password in `config.php` with the generated hash
+5. Access `/admin.php` to manage your files
+6. Import `EDIT_BEFORE_LOADING.sxcu` into ShareX
+7. Start uploading!
 
 ## Requirements
 
