@@ -1,3 +1,9 @@
+# Serenity Share
+
+A free, open source, self-hosted file and image sharing solution with ShareX integration. Built with functionality in mind - easy to deploy on any web host.
+
+> **Note:** This project prioritizes functionality over perfect code architecture. While it works reliably, the implementation may not follow all best practices. Contributions and improvements are welcome!
+
 ## Screenshots
 
 ![Dashboard](assets/images/dash.png)
@@ -7,18 +13,6 @@
 ![Gallery View](assets/images/gallery.png)
 
 ![Discord Notifications](assets/images/Discord_JmpQF3inS7.png)
-
-
-
-
-
-# Serenity Share
-
-**I'm not a pro developer, so I know the code is crap.**
-
-This project was built with a focus on functionality rather than perfect code. It works, but the implementation might not follow best practices. Feel free to improve it!
-
-Serenity Share is a free, open source, self-hosted file and image sharing solution with ShareX integration. Easy to deploy on any web host.
 
 ## Features
 
@@ -30,9 +24,21 @@ Serenity Share is a free, open source, self-hosted file and image sharing soluti
 - 🚀 Easy Deployment - Simple installation process on any PHP-enabled web host
 - 💬 Discord Notifications - Get real-time notifications in Discord when files are uploaded
 
+## Quick Start
+
+1. Download the files to your web server
+2. Edit `config.php` with your domain and settings
+3. Access `/admin.php` to manage your files
+4. Import `EDIT_BEFORE_LOADING.sxcu` into ShareX
+5. Start uploading!
+
 ## Requirements
 
 - PHP 7.4 or higher
+- MySQL 5.7+ or MariaDB 10.3+
+- Web server (Apache/Nginx)
+- Minimum 1GB RAM (2GB recommended)
+- DirectAdmin compatible (recommended)
 
 ## Installation
 
@@ -41,34 +47,10 @@ Serenity Share is a free, open source, self-hosted file and image sharing soluti
 3. Edit `config.php` with your specific settings:
    - Update `domain_url` to point to your domain
    - Set a secure random string for `secret_key`
-   - Change the admin password using the built-in password hash generator at `yourdomain.com/hash_password.php`
+   - Change the admin password (default is "password") using yourdomain/hash_password.php
    - Add your IP to `admin_ips` for admin area access
 4. Make sure upload directories are writable by your web server
 5. Access your site and login to the admin area at `/admin.php`
-
-## Password Hash Generator
-
-Serenity Share includes a built-in password hash generator to help you create secure password hashes for the admin area.
-
-### How to use:
-
-1. **Via Web Interface:**
-   - Navigate to `yourdomain.com/hash_password.php`
-   - Enter your desired password
-   - Select your preferred hashing algorithm (default is recommended)
-   - Click "Generate Hash"
-   - Copy the generated hash
-
-2. **Update config.php:**
-   - Replace the `password` value in `config.php` with the generated hash
-   - Example: `'password' => '$2y$10$gajQExEjPRHasgkPezXZX.fq0OicPnNLLy7sTCliuAGKDkrlHW4jm',`
-
-3. **Command Line Alternative:**
-   ```bash
-   php -r "echo password_hash('your_password_here', PASSWORD_DEFAULT);"
-   ```
-
-**Security Note:** Never store plain text passwords in your configuration files. Always use the hash generator to create secure password hashes.
 
 ## Discord Notifications Setup
 
@@ -105,72 +87,6 @@ Set `'discord_notifications' => false` in config.php
 1. Open the EDIT_BEFORE_LOADING.sxcu in any text editer and config to you
 2. Import it into ShareX
 3. Done
-
-## Troubleshooting
-
-### ShareX Upload Error 500
-
-If you're getting Error 500 when uploading from ShareX, here are the most common causes and solutions:
-
-#### 1. **Directory Permissions**
-Make sure upload directories are writable:
-```bash
-chmod 755 img/
-chmod 755 shares/
-chmod 755 logs/
-```
-
-#### 2. **PHP Upload Limits**
-Check your PHP configuration in `php.ini`:
-```ini
-upload_max_filesize = 100M
-post_max_size = 100M
-max_execution_time = 300
-memory_limit = 256M
-```
-
-#### 3. **File Size Limits**
-Update your `config.php` if needed:
-```php
-'max_file_size' => 100 * 1024 * 1024,  // 100MB
-```
-
-#### 4. **Missing PHP Extensions**
-Ensure these PHP extensions are installed:
-- `fileinfo` - For file type detection
-- `gd` or `imagick` - For image processing
-- `zip` - For ZIP downloads
-
-#### 5. **Debug Mode**
-Enable debug mode in `config.php` to see detailed error messages:
-```php
-'debug' => true,
-```
-Then check `/logs/php_errors.log` for specific error details.
-
-#### 6. **ShareX Configuration**
-Verify your ShareX configuration:
-- URL should point to `yourdomain.com/upload.php`
-- Method should be `POST`
-- File form name should be `file`
-- Response should be `URL`
-
-#### 7. **Server Error Logs**
-Check your web server error logs (usually in `/var/log/apache2/error.log` or `/var/log/nginx/error.log`)
-
-#### 8. **Quick Test**
-Test upload functionality directly:
-1. Go to `yourdomain.com/upload.php` in your browser
-2. Try uploading a small image file
-3. If this works, the issue is with ShareX configuration
-4. If this fails, the issue is server-side
-
-### Common Error Messages
-
-- **"Directory must be writable"** → Fix directory permissions
-- **"File too large"** → Increase PHP upload limits
-- **"Invalid file type"** → Check `allowed_types` in config.php
-- **"Memory exhausted"** → Increase `memory_limit` in php.ini
 
 ## Security Notes
 
