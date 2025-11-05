@@ -20,9 +20,6 @@ $filepath = $config['upload_dir'] . $filename;
 
 if ($filename && file_exists($filepath)) {
 
-    logVisitor($filename);
-    
-
     $extension = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
     
    
