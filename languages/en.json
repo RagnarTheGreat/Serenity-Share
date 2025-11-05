@@ -1,0 +1,102 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "system_info": "System Information",
+      "storage_info": "Storage Information",
+      "system_health": "System Health"
+    },
+    "buttons": {
+      "view_gallery": "View Gallery",
+      "view_logs": "View Logs",
+      "share_files": "Share Files",
+      "logout": "Logout",
+      "language": "Language"
+    },
+    "php_info": {
+      "title": "PHP Information",
+      "php_version": "PHP Version",
+      "ffmpeg": "FFmpeg",
+      "zip": "ZIP",
+      "curl": "cURL",
+      "imagick": "Imagick",
+      "file_info": "File Info",
+      "exif": "Exif",
+      "installed": "Installed",
+      "not_found": "Not Found",
+      "not_available": "Not Available",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
+    "directory_info": {
+      "title": "Directory Information",
+      "upload_directory": "Upload Directory",
+      "logs_directory": "Logs Directory",
+      "temp_directory": "Temp Directory",
+      "writable": "Writable",
+      "not_writable": "Not Writable"
+    },
+    "storage": {
+      "upload_directory": "Upload Directory",
+      "total_size": "Total Size",
+      "total_files": "Total Files",
+      "images": "Images",
+      "gifs": "GIFs",
+      "videos": "Videos",
+      "other_files": "Other Files",
+      "files": "files"
+    },
+    "system_health": {
+      "title": "System Health",
+      "disk_space": "Disk Space",
+      "cpu_usage": "CPU Usage",
+      "php_status": "PHP Status",
+      "healthy": "Healthy",
+      "low_space": "Low Space",
+      "normal": "Normal",
+      "high": "High",
+      "no_errors": "No Errors",
+      "errors_detected": "Errors Detected"
+    },
+    "language_switcher": {
+      "select_language": "Select Language",
+      "current_language": "Current Language"
+    }
+  },
+  "share": {
+    "title": "Share Management",
+    "back_to_dashboard": "Back to Dashboard",
+    "create_new_share": "Create New Share",
+    "select_files": "Select Files or Folders",
+    "drag_drop": "Drag and drop files or folders here",
+    "or": "or",
+    "choose_files": "Choose Files",
+    "choose_folder": "Choose Folder",
+    "share_expiration": "Share Expiration",
+    "day": "Day",
+    "days": "Days",
+    "never": "Never",
+    "password_protection": "Password Protection (Optional)",
+    "enter_password": "Enter password to protect share",
+    "create_share": "Create Share",
+    "active_shares": "Active Shares",
+    "share_id": "Share #",
+    "created": "Created",
+    "expires": "Expires",
+    "files": "Files",
+    "preparing_upload": "Preparing upload...",
+    "share_details": "Share Details",
+    "protected_share": "Protected Share",
+    "password_protected": "This share is password protected:",
+    "access_files": "Access Files"
+  },
+  "gallery": {
+    "title": "Image Gallery",
+    "total_files": "Total Files",
+    "storage_used": "Storage Used"
+  },
+  "logs": {
+    "title": "View Logs"
+  }
+}
+

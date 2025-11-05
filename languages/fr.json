@@ -1,0 +1,102 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "Tableau de Bord Admin",
+      "system_info": "Informations Système",
+      "storage_info": "Informations de Stockage",
+      "system_health": "État du Système"
+    },
+    "buttons": {
+      "view_gallery": "Voir la Galerie",
+      "view_logs": "Voir les Journaux",
+      "share_files": "Partager des Fichiers",
+      "logout": "Déconnexion",
+      "language": "Langue"
+    },
+    "php_info": {
+      "title": "Informations PHP",
+      "php_version": "Version PHP",
+      "ffmpeg": "FFmpeg",
+      "zip": "ZIP",
+      "curl": "cURL",
+      "imagick": "Imagick",
+      "file_info": "Info Fichier",
+      "exif": "Exif",
+      "installed": "Installé",
+      "not_found": "Non Trouvé",
+      "not_available": "Non Disponible",
+      "enabled": "Activé",
+      "disabled": "Désactivé"
+    },
+    "directory_info": {
+      "title": "Informations du Répertoire",
+      "upload_directory": "Répertoire de Téléchargement",
+      "logs_directory": "Répertoire des Journaux",
+      "temp_directory": "Répertoire Temporaire",
+      "writable": "Inscriptible",
+      "not_writable": "Non Inscriptible"
+    },
+    "storage": {
+      "upload_directory": "Répertoire de Téléchargement",
+      "total_size": "Taille Totale",
+      "total_files": "Fichiers Totaux",
+      "images": "Images",
+      "gifs": "GIFs",
+      "videos": "Vidéos",
+      "other_files": "Autres Fichiers",
+      "files": "fichiers"
+    },
+    "system_health": {
+      "title": "État du Système",
+      "disk_space": "Espace Disque",
+      "cpu_usage": "Utilisation CPU",
+      "php_status": "État PHP",
+      "healthy": "Sain",
+      "low_space": "Espace Faible",
+      "normal": "Normal",
+      "high": "Élevé",
+      "no_errors": "Aucune Erreur",
+      "errors_detected": "Erreurs Détectées"
+    },
+    "language_switcher": {
+      "select_language": "Sélectionner la Langue",
+      "current_language": "Langue Actuelle"
+    }
+  },
+  "share": {
+    "title": "Gestion du Partage",
+    "back_to_dashboard": "Retour au Tableau de Bord",
+    "create_new_share": "Créer un Nouveau Partage",
+    "select_files": "Sélectionner des Fichiers ou Dossiers",
+    "drag_drop": "Glissez-déposez des fichiers ou dossiers ici",
+    "or": "ou",
+    "choose_files": "Choisir des Fichiers",
+    "choose_folder": "Choisir un Dossier",
+    "share_expiration": "Expiration du Partage",
+    "day": "Jour",
+    "days": "Jours",
+    "never": "Jamais",
+    "password_protection": "Protection par Mot de Passe (Optionnel)",
+    "enter_password": "Entrez un mot de passe pour protéger le partage",
+    "create_share": "Créer le Partage",
+    "active_shares": "Partages Actifs",
+    "share_id": "Partage #",
+    "created": "Créé",
+    "expires": "Expire",
+    "files": "Fichiers",
+    "preparing_upload": "Préparation du téléchargement...",
+    "share_details": "Détails du Partage",
+    "protected_share": "Partage Protégé",
+    "password_protected": "Ce partage est protégé par mot de passe:",
+    "access_files": "Accéder aux Fichiers"
+  },
+  "gallery": {
+    "title": "Galerie d'Images",
+    "total_files": "Fichiers Totaux",
+    "storage_used": "Espace Utilisé"
+  },
+  "logs": {
+    "title": "Voir les Journaux"
+  }
+}
+

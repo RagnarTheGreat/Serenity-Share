@@ -1,0 +1,102 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "管理面板",
+      "system_info": "系统信息",
+      "storage_info": "存储信息",
+      "system_health": "系统状态"
+    },
+    "buttons": {
+      "view_gallery": "查看图库",
+      "view_logs": "查看日志",
+      "share_files": "分享文件",
+      "logout": "退出",
+      "language": "语言"
+    },
+    "php_info": {
+      "title": "PHP信息",
+      "php_version": "PHP版本",
+      "ffmpeg": "FFmpeg",
+      "zip": "ZIP",
+      "curl": "cURL",
+      "imagick": "Imagick",
+      "file_info": "文件信息",
+      "exif": "Exif",
+      "installed": "已安装",
+      "not_found": "未找到",
+      "not_available": "不可用",
+      "enabled": "已启用",
+      "disabled": "已禁用"
+    },
+    "directory_info": {
+      "title": "目录信息",
+      "upload_directory": "上传目录",
+      "logs_directory": "日志目录",
+      "temp_directory": "临时目录",
+      "writable": "可写",
+      "not_writable": "不可写"
+    },
+    "storage": {
+      "upload_directory": "上传目录",
+      "total_size": "总大小",
+      "total_files": "总文件数",
+      "images": "图片",
+      "gifs": "GIFs",
+      "videos": "视频",
+      "other_files": "其他文件",
+      "files": "个文件"
+    },
+    "system_health": {
+      "title": "系统状态",
+      "disk_space": "磁盘空间",
+      "cpu_usage": "CPU使用率",
+      "php_status": "PHP状态",
+      "healthy": "健康",
+      "low_space": "空间不足",
+      "normal": "正常",
+      "high": "高",
+      "no_errors": "无错误",
+      "errors_detected": "检测到错误"
+    },
+    "language_switcher": {
+      "select_language": "选择语言",
+      "current_language": "当前语言"
+    }
+  },
+  "share": {
+    "title": "分享管理",
+    "back_to_dashboard": "返回仪表板",
+    "create_new_share": "创建新分享",
+    "select_files": "选择文件或文件夹",
+    "drag_drop": "将文件或文件夹拖放到此处",
+    "or": "或",
+    "choose_files": "选择文件",
+    "choose_folder": "选择文件夹",
+    "share_expiration": "分享过期时间",
+    "day": "天",
+    "days": "天",
+    "never": "永不",
+    "password_protection": "密码保护（可选）",
+    "enter_password": "输入密码以保护分享",
+    "create_share": "创建分享",
+    "active_shares": "活跃分享",
+    "share_id": "分享 #",
+    "created": "创建时间",
+    "expires": "过期时间",
+    "files": "文件",
+    "preparing_upload": "准备上传...",
+    "share_details": "分享详情",
+    "protected_share": "受保护的分享",
+    "password_protected": "此分享受密码保护：",
+    "access_files": "访问文件"
+  },
+  "gallery": {
+    "title": "图片库",
+    "total_files": "总文件数",
+    "storage_used": "已使用存储"
+  },
+  "logs": {
+    "title": "查看日志"
+  }
+}
+

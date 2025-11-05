@@ -1,0 +1,274 @@
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px
+}
+
+.gallery-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px
+}
+
+.gallery-item {
+    background: var(--element-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform .3s ease;
+    position: relative
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px)
+}
+
+.gallery-list .gallery-item {
+    display: flex;
+    gap: 20px;
+    padding: 15px
+}
+
+.gallery-list .gallery-img-container {
+    width: 200px;
+    min-width: 200px;
+    aspect-ratio: 16/9
+}
+
+.gallery-list .gallery-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center
+}
+
+/* Header Info Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.header-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.page-info {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+/* Pagination Styles */
+.pagination-top,
+.pagination-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    padding: 15px 20px;
+    background: var(--element-bg);
+    border-radius: 12px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.pagination {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.pagination-link {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 2px;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.pagination-link:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.pagination-current {
+    background: var(--primary-color) !important;
+    color: white !important;
+    font-weight: bold;
+    cursor: default;
+}
+
+.pagination-current:hover {
+    transform: none;
+}
+
+.pagination-info {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+/* No Items State */
+.no-items {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    background: var(--element-bg);
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.no-items-content {
+    text-align: center;
+    padding: 40px;
+}
+
+.no-items-icon {
+    font-size: 4em;
+    display: block;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.no-items h3 {
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.no-items p {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+@media (max-width:768px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))
+    }
+
+    .gallery-list .gallery-item {
+        flex-direction: column;
+        gap: 10px
+    }
+
+    .gallery-list .gallery-img-container {
+        width: 100%
+    }
+
+    .gallery-controls {
+        flex-direction: column;
+        gap: 10px
+    }
+
+    .control-buttons {
+        width: 100%
+    }
+
+    .control-buttons .button {
+        flex: 1;
+        text-align: center
+    }
+
+    .header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .header-info {
+        order: -1;
+        margin-bottom: 10px;
+    }
+
+    .pagination-top,
+    .pagination-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+
+    .pagination-link {
+        padding: 6px 10px;
+        font-size: 13px;
+        min-width: 35px;
+    }
+
+    .no-items-content {
+        padding: 20px;
+    }
+
+    .no-items-icon {
+        font-size: 3em;
+    }
+}
+
+/* Delete Confirmation Dialog */
+.delete-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--element-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.delete-dialog-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.delete-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.button-confirm-delete {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button-cancel {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}

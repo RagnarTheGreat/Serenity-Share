@@ -1,0 +1,102 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "관리자 대시보드",
+      "system_info": "시스템 정보",
+      "storage_info": "저장소 정보",
+      "system_health": "시스템 상태"
+    },
+    "buttons": {
+      "view_gallery": "갤러리 보기",
+      "view_logs": "로그 보기",
+      "share_files": "파일 공유",
+      "logout": "로그아웃",
+      "language": "언어"
+    },
+    "php_info": {
+      "title": "PHP 정보",
+      "php_version": "PHP 버전",
+      "ffmpeg": "FFmpeg",
+      "zip": "ZIP",
+      "curl": "cURL",
+      "imagick": "Imagick",
+      "file_info": "파일 정보",
+      "exif": "Exif",
+      "installed": "설치됨",
+      "not_found": "찾을 수 없음",
+      "not_available": "사용 불가",
+      "enabled": "활성화됨",
+      "disabled": "비활성화됨"
+    },
+    "directory_info": {
+      "title": "디렉토리 정보",
+      "upload_directory": "업로드 디렉토리",
+      "logs_directory": "로그 디렉토리",
+      "temp_directory": "임시 디렉토리",
+      "writable": "쓰기 가능",
+      "not_writable": "쓰기 불가"
+    },
+    "storage": {
+      "upload_directory": "업로드 디렉토리",
+      "total_size": "총 크기",
+      "total_files": "총 파일 수",
+      "images": "이미지",
+      "gifs": "GIFs",
+      "videos": "비디오",
+      "other_files": "기타 파일",
+      "files": "개 파일"
+    },
+    "system_health": {
+      "title": "시스템 상태",
+      "disk_space": "디스크 공간",
+      "cpu_usage": "CPU 사용률",
+      "php_status": "PHP 상태",
+      "healthy": "정상",
+      "low_space": "공간 부족",
+      "normal": "정상",
+      "high": "높음",
+      "no_errors": "오류 없음",
+      "errors_detected": "오류 감지됨"
+    },
+    "language_switcher": {
+      "select_language": "언어 선택",
+      "current_language": "현재 언어"
+    }
+  },
+  "share": {
+    "title": "공유 관리",
+    "back_to_dashboard": "대시보드로 돌아가기",
+    "create_new_share": "새 공유 만들기",
+    "select_files": "파일 또는 폴더 선택",
+    "drag_drop": "파일 또는 폴더를 여기에 끌어다 놓으세요",
+    "or": "또는",
+    "choose_files": "파일 선택",
+    "choose_folder": "폴더 선택",
+    "share_expiration": "공유 만료",
+    "day": "일",
+    "days": "일",
+    "never": "만료 없음",
+    "password_protection": "비밀번호 보호 (선택사항)",
+    "enter_password": "공유를 보호할 비밀번호를 입력하세요",
+    "create_share": "공유 만들기",
+    "active_shares": "활성 공유",
+    "share_id": "공유 #",
+    "created": "생성됨",
+    "expires": "만료",
+    "files": "파일",
+    "preparing_upload": "업로드 준비 중...",
+    "share_details": "공유 세부정보",
+    "protected_share": "보호된 공유",
+    "password_protected": "이 공유는 비밀번호로 보호됩니다:",
+    "access_files": "파일 액세스"
+  },
+  "gallery": {
+    "title": "이미지 갤러리",
+    "total_files": "총 파일 수",
+    "storage_used": "사용된 저장소"
+  },
+  "logs": {
+    "title": "로그 보기"
+  }
+}
+

@@ -1,0 +1,12 @@
+# Common exclusions
+.DS_Store
+*.log
+*.cache
+node_modules/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

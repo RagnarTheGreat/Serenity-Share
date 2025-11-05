@@ -1,0 +1,102 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "Panel de Administración",
+      "system_info": "Información del Sistema",
+      "storage_info": "Información de Almacenamiento",
+      "system_health": "Salud del Sistema"
+    },
+    "buttons": {
+      "view_gallery": "Ver Galería",
+      "view_logs": "Ver Registros",
+      "share_files": "Compartir Archivos",
+      "logout": "Cerrar Sesión",
+      "language": "Idioma"
+    },
+    "php_info": {
+      "title": "Información PHP",
+      "php_version": "Versión PHP",
+      "ffmpeg": "FFmpeg",
+      "zip": "ZIP",
+      "curl": "cURL",
+      "imagick": "Imagick",
+      "file_info": "Información de Archivo",
+      "exif": "Exif",
+      "installed": "Instalado",
+      "not_found": "No Encontrado",
+      "not_available": "No Disponible",
+      "enabled": "Habilitado",
+      "disabled": "Deshabilitado"
+    },
+    "directory_info": {
+      "title": "Información de Directorio",
+      "upload_directory": "Directorio de Carga",
+      "logs_directory": "Directorio de Registros",
+      "temp_directory": "Directorio Temporal",
+      "writable": "Escribible",
+      "not_writable": "No Escribible"
+    },
+    "storage": {
+      "upload_directory": "Directorio de Carga",
+      "total_size": "Tamaño Total",
+      "total_files": "Archivos Totales",
+      "images": "Imágenes",
+      "gifs": "GIFs",
+      "videos": "Videos",
+      "other_files": "Otros Archivos",
+      "files": "archivos"
+    },
+    "system_health": {
+      "title": "Salud del Sistema",
+      "disk_space": "Espacio en Disco",
+      "cpu_usage": "Uso de CPU",
+      "php_status": "Estado PHP",
+      "healthy": "Saludable",
+      "low_space": "Espacio Bajo",
+      "normal": "Normal",
+      "high": "Alto",
+      "no_errors": "Sin Errores",
+      "errors_detected": "Errores Detectados"
+    },
+    "language_switcher": {
+      "select_language": "Seleccionar Idioma",
+      "current_language": "Idioma Actual"
+    }
+  },
+  "share": {
+    "title": "Gestión de Compartir",
+    "back_to_dashboard": "Volver al Panel",
+    "create_new_share": "Crear Nueva Compartición",
+    "select_files": "Seleccionar Archivos o Carpetas",
+    "drag_drop": "Arrastra y suelta archivos o carpetas aquí",
+    "or": "o",
+    "choose_files": "Elegir Archivos",
+    "choose_folder": "Elegir Carpeta",
+    "share_expiration": "Expiración de Compartición",
+    "day": "Día",
+    "days": "Días",
+    "never": "Nunca",
+    "password_protection": "Protección con Contraseña (Opcional)",
+    "enter_password": "Ingresa contraseña para proteger la compartición",
+    "create_share": "Crear Compartición",
+    "active_shares": "Comparticiones Activas",
+    "share_id": "Compartición #",
+    "created": "Creado",
+    "expires": "Expira",
+    "files": "Archivos",
+    "preparing_upload": "Preparando carga...",
+    "share_details": "Detalles de Compartición",
+    "protected_share": "Compartición Protegida",
+    "password_protected": "Esta compartición está protegida con contraseña:",
+    "access_files": "Acceder a Archivos"
+  },
+  "gallery": {
+    "title": "Galería de Imágenes",
+    "total_files": "Archivos Totales",
+    "storage_used": "Almacenamiento Usado"
+  },
+  "logs": {
+    "title": "Ver Registros"
+  }
+}
+

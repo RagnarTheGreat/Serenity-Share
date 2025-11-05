@@ -1,0 +1,113 @@
+# Basic security headers
+Header set X-XSS-Protection "1; mode=block"
+Header set X-Frame-Options "SAMEORIGIN"
+Header set X-Content-Type-Options "nosniff"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+# Content Security Policy
+Header set Content-Security-Policy "default-src 'self'; \
+    script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; \
+    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com; \
+    img-src 'self' data: https://www.google.com; \
+    font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com https://cdnjs.cloudflare.com; \
+    connect-src 'self' http://ip-api.com; \
+    frame-ancestors 'none'; \
+    form-action 'self';"
+
+# Protect sensitive files
+# <FilesMatch "\.(php|json|txt)$">
+#     Order Deny,Allow
+#     Deny from all
+#     Allow from 127.0.0.1
+# </FilesMatch>
+
+# Allow specific PHP files
+<FilesMatch "(upload|logger|view_logs|gallery|install_composer)\.php$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Allow access to CSS files
+<FilesMatch "\.css$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Basic rewrite rules
+RewriteEngine On
+RewriteBase /
+
+# Protect logs directory
+<IfModule mod_rewrite.c>
+    RewriteRule ^logs/ - [F,L]
+</IfModule>
+
+# Protect backup directory
+<IfModule mod_rewrite.c>
+    RewriteRule ^backups/ - [F,L]
+</IfModule>
+
+# Protect shares directory
+<IfModule mod_rewrite.c>
+    RewriteRule ^shares/ share.php [L]
+</IfModule>
+
+# Prevent directory listing
+Options -Indexes
+
+# Route image/video requests through logger
+RewriteRule ^img/(.+)\.(jpg|jpeg|png|gif|mp4|webm)$ logger.php?f=$1.$2 [L,QSA]
+
+# Browser caching
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Development settings - much shorter cache times
+    # Images
+    ExpiresByType image/jpeg "access plus 1 hour"
+    ExpiresByType image/gif "access plus 1 hour"
+    ExpiresByType image/png "access plus 1 hour"
+    ExpiresByType image/webp "access plus 1 hour"
+    ExpiresByType image/svg+xml "access plus 1 hour"
+    ExpiresByType image/x-icon "access plus 1 hour"
+    
+    # Video
+    ExpiresByType video/mp4 "access plus 1 hour"
+    ExpiresByType video/webm "access plus 1 hour"
+    
+    # CSS, JavaScript
+    ExpiresByType text/css "access plus 1 minute"
+    ExpiresByType text/javascript "access plus 1 minute"
+    ExpiresByType application/javascript "access plus 1 minute"
+    
+    # Others
+    ExpiresDefault "access plus 5 minutes"
+</IfModule>
+
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+
+RewriteEngine On
+RewriteRule ^s/([a-zA-Z0-9]+)$ public_share.php?id=$1 [L,QSA]
+
+ErrorDocument 403 /error.php?code=403
+ErrorDocument 404 /templates/error.php
+
+<IfModule mod_php.c>
+    php_value upload_max_filesize 2048M
+    php_value post_max_size 2048M
+    php_value memory_limit 256M
+    php_value max_execution_time 300
+    php_value max_input_time 300
+</IfModule>

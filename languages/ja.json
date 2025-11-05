@@ -1,0 +1,102 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "管理ダッシュボード",
+      "system_info": "システム情報",
+      "storage_info": "ストレージ情報",
+      "system_health": "システム状態"
+    },
+    "buttons": {
+      "view_gallery": "ギャラリーを表示",
+      "view_logs": "ログを表示",
+      "share_files": "ファイルを共有",
+      "logout": "ログアウト",
+      "language": "言語"
+    },
+    "php_info": {
+      "title": "PHP情報",
+      "php_version": "PHPバージョン",
+      "ffmpeg": "FFmpeg",
+      "zip": "ZIP",
+      "curl": "cURL",
+      "imagick": "Imagick",
+      "file_info": "ファイル情報",
+      "exif": "Exif",
+      "installed": "インストール済み",
+      "not_found": "見つかりません",
+      "not_available": "利用不可",
+      "enabled": "有効",
+      "disabled": "無効"
+    },
+    "directory_info": {
+      "title": "ディレクトリ情報",
+      "upload_directory": "アップロードディレクトリ",
+      "logs_directory": "ログディレクトリ",
+      "temp_directory": "一時ディレクトリ",
+      "writable": "書き込み可能",
+      "not_writable": "書き込み不可"
+    },
+    "storage": {
+      "upload_directory": "アップロードディレクトリ",
+      "total_size": "合計サイズ",
+      "total_files": "合計ファイル数",
+      "images": "画像",
+      "gifs": "GIFs",
+      "videos": "動画",
+      "other_files": "その他のファイル",
+      "files": "ファイル"
+    },
+    "system_health": {
+      "title": "システム状態",
+      "disk_space": "ディスク容量",
+      "cpu_usage": "CPU使用率",
+      "php_status": "PHP状態",
+      "healthy": "正常",
+      "low_space": "容量不足",
+      "normal": "通常",
+      "high": "高い",
+      "no_errors": "エラーなし",
+      "errors_detected": "エラー検出"
+    },
+    "language_switcher": {
+      "select_language": "言語を選択",
+      "current_language": "現在の言語"
+    }
+  },
+  "share": {
+    "title": "共有管理",
+    "back_to_dashboard": "ダッシュボードに戻る",
+    "create_new_share": "新しい共有を作成",
+    "select_files": "ファイルまたはフォルダを選択",
+    "drag_drop": "ファイルまたはフォルダをここにドラッグ＆ドロップ",
+    "or": "または",
+    "choose_files": "ファイルを選択",
+    "choose_folder": "フォルダを選択",
+    "share_expiration": "共有の有効期限",
+    "day": "日",
+    "days": "日間",
+    "never": "無期限",
+    "password_protection": "パスワード保護（オプション）",
+    "enter_password": "共有を保護するパスワードを入力",
+    "create_share": "共有を作成",
+    "active_shares": "アクティブな共有",
+    "share_id": "共有 #",
+    "created": "作成日時",
+    "expires": "有効期限",
+    "files": "ファイル",
+    "preparing_upload": "アップロード準備中...",
+    "share_details": "共有の詳細",
+    "protected_share": "保護された共有",
+    "password_protected": "この共有はパスワードで保護されています：",
+    "access_files": "ファイルにアクセス"
+  },
+  "gallery": {
+    "title": "画像ギャラリー",
+    "total_files": "合計ファイル数",
+    "storage_used": "使用済みストレージ"
+  },
+  "logs": {
+    "title": "ログを表示"
+  }
+}
+

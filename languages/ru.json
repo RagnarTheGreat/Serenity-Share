@@ -1,0 +1,102 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "Панель администратора",
+      "system_info": "Информация о системе",
+      "storage_info": "Информация о хранилище",
+      "system_health": "Состояние системы"
+    },
+    "buttons": {
+      "view_gallery": "Просмотреть галерею",
+      "view_logs": "Просмотреть журналы",
+      "share_files": "Поделиться файлами",
+      "logout": "Выйти",
+      "language": "Язык"
+    },
+    "php_info": {
+      "title": "Информация PHP",
+      "php_version": "Версия PHP",
+      "ffmpeg": "FFmpeg",
+      "zip": "ZIP",
+      "curl": "cURL",
+      "imagick": "Imagick",
+      "file_info": "Информация о файле",
+      "exif": "Exif",
+      "installed": "Установлено",
+      "not_found": "Не найдено",
+      "not_available": "Недоступно",
+      "enabled": "Включено",
+      "disabled": "Отключено"
+    },
+    "directory_info": {
+      "title": "Информация о директории",
+      "upload_directory": "Директория загрузки",
+      "logs_directory": "Директория журналов",
+      "temp_directory": "Временная директория",
+      "writable": "Доступна для записи",
+      "not_writable": "Недоступна для записи"
+    },
+    "storage": {
+      "upload_directory": "Директория загрузки",
+      "total_size": "Общий размер",
+      "total_files": "Всего файлов",
+      "images": "Изображения",
+      "gifs": "GIFs",
+      "videos": "Видео",
+      "other_files": "Другие файлы",
+      "files": "файлов"
+    },
+    "system_health": {
+      "title": "Состояние системы",
+      "disk_space": "Место на диске",
+      "cpu_usage": "Использование CPU",
+      "php_status": "Статус PHP",
+      "healthy": "Здорово",
+      "low_space": "Мало места",
+      "normal": "Нормально",
+      "high": "Высокое",
+      "no_errors": "Нет ошибок",
+      "errors_detected": "Ошибки обнаружены"
+    },
+    "language_switcher": {
+      "select_language": "Выбрать язык",
+      "current_language": "Текущий язык"
+    }
+  },
+  "share": {
+    "title": "Управление общим доступом",
+    "back_to_dashboard": "Вернуться к панели",
+    "create_new_share": "Создать новую общую папку",
+    "select_files": "Выбрать файлы или папки",
+    "drag_drop": "Перетащите файлы или папки сюда",
+    "or": "или",
+    "choose_files": "Выбрать файлы",
+    "choose_folder": "Выбрать папку",
+    "share_expiration": "Срок действия общего доступа",
+    "day": "День",
+    "days": "Дней",
+    "never": "Никогда",
+    "password_protection": "Защита паролем (Необязательно)",
+    "enter_password": "Введите пароль для защиты общего доступа",
+    "create_share": "Создать общую папку",
+    "active_shares": "Активные общие папки",
+    "share_id": "Общая папка #",
+    "created": "Создано",
+    "expires": "Истекает",
+    "files": "Файлы",
+    "preparing_upload": "Подготовка загрузки...",
+    "share_details": "Детали общей папки",
+    "protected_share": "Защищенная общая папка",
+    "password_protected": "Эта общая папка защищена паролем:",
+    "access_files": "Доступ к файлам"
+  },
+  "gallery": {
+    "title": "Галерея изображений",
+    "total_files": "Всего файлов",
+    "storage_used": "Использовано места"
+  },
+  "logs": {
+    "title": "Просмотр журналов"
+  }
+}
+

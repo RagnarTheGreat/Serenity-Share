@@ -1,0 +1,102 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "Painel de Administração",
+      "system_info": "Informações do Sistema",
+      "storage_info": "Informações de Armazenamento",
+      "system_health": "Estado do Sistema"
+    },
+    "buttons": {
+      "view_gallery": "Ver Galeria",
+      "view_logs": "Ver Registros",
+      "share_files": "Compartilhar Arquivos",
+      "logout": "Sair",
+      "language": "Idioma"
+    },
+    "php_info": {
+      "title": "Informações PHP",
+      "php_version": "Versão PHP",
+      "ffmpeg": "FFmpeg",
+      "zip": "ZIP",
+      "curl": "cURL",
+      "imagick": "Imagick",
+      "file_info": "Info de Arquivo",
+      "exif": "Exif",
+      "installed": "Instalado",
+      "not_found": "Não Encontrado",
+      "not_available": "Não Disponível",
+      "enabled": "Habilitado",
+      "disabled": "Desabilitado"
+    },
+    "directory_info": {
+      "title": "Informações de Diretório",
+      "upload_directory": "Diretório de Upload",
+      "logs_directory": "Diretório de Registros",
+      "temp_directory": "Diretório Temporário",
+      "writable": "Gravável",
+      "not_writable": "Não Gravável"
+    },
+    "storage": {
+      "upload_directory": "Diretório de Upload",
+      "total_size": "Tamanho Total",
+      "total_files": "Arquivos Totais",
+      "images": "Imagens",
+      "gifs": "GIFs",
+      "videos": "Vídeos",
+      "other_files": "Outros Arquivos",
+      "files": "arquivos"
+    },
+    "system_health": {
+      "title": "Estado do Sistema",
+      "disk_space": "Espaço em Disco",
+      "cpu_usage": "Uso de CPU",
+      "php_status": "Estado PHP",
+      "healthy": "Saudável",
+      "low_space": "Espaço Baixo",
+      "normal": "Normal",
+      "high": "Alto",
+      "no_errors": "Sem Erros",
+      "errors_detected": "Erros Detectados"
+    },
+    "language_switcher": {
+      "select_language": "Selecionar Idioma",
+      "current_language": "Idioma Atual"
+    }
+  },
+  "share": {
+    "title": "Gerenciamento de Compartilhamento",
+    "back_to_dashboard": "Voltar ao Painel",
+    "create_new_share": "Criar Novo Compartilhamento",
+    "select_files": "Selecionar Arquivos ou Pastas",
+    "drag_drop": "Arraste e solte arquivos ou pastas aqui",
+    "or": "ou",
+    "choose_files": "Escolher Arquivos",
+    "choose_folder": "Escolher Pasta",
+    "share_expiration": "Expiração do Compartilhamento",
+    "day": "Dia",
+    "days": "Dias",
+    "never": "Nunca",
+    "password_protection": "Proteção por Senha (Opcional)",
+    "enter_password": "Digite a senha para proteger o compartilhamento",
+    "create_share": "Criar Compartilhamento",
+    "active_shares": "Compartilhamentos Ativos",
+    "share_id": "Compartilhamento #",
+    "created": "Criado",
+    "expires": "Expira",
+    "files": "Arquivos",
+    "preparing_upload": "Preparando upload...",
+    "share_details": "Detalhes do Compartilhamento",
+    "protected_share": "Compartilhamento Protegido",
+    "password_protected": "Este compartilhamento está protegido por senha:",
+    "access_files": "Acessar Arquivos"
+  },
+  "gallery": {
+    "title": "Galeria de Imagens",
+    "total_files": "Arquivos Totais",
+    "storage_used": "Armazenamento Usado"
+  },
+  "logs": {
+    "title": "Ver Registros"
+  }
+}
+

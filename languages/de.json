@@ -1,0 +1,102 @@
+{
+  "admin": {
+    "dashboard": {
+      "title": "Admin-Dashboard",
+      "system_info": "Systeminformationen",
+      "storage_info": "Speicherinformationen",
+      "system_health": "Systemzustand"
+    },
+    "buttons": {
+      "view_gallery": "Galerie anzeigen",
+      "view_logs": "Protokolle anzeigen",
+      "share_files": "Dateien teilen",
+      "logout": "Abmelden",
+      "language": "Sprache"
+    },
+    "php_info": {
+      "title": "PHP-Informationen",
+      "php_version": "PHP-Version",
+      "ffmpeg": "FFmpeg",
+      "zip": "ZIP",
+      "curl": "cURL",
+      "imagick": "Imagick",
+      "file_info": "Dateiinformationen",
+      "exif": "Exif",
+      "installed": "Installiert",
+      "not_found": "Nicht gefunden",
+      "not_available": "Nicht verfügbar",
+      "enabled": "Aktiviert",
+      "disabled": "Deaktiviert"
+    },
+    "directory_info": {
+      "title": "Verzeichnisinformationen",
+      "upload_directory": "Upload-Verzeichnis",
+      "logs_directory": "Protokoll-Verzeichnis",
+      "temp_directory": "Temporäres Verzeichnis",
+      "writable": "Beschreibbar",
+      "not_writable": "Nicht beschreibbar"
+    },
+    "storage": {
+      "upload_directory": "Upload-Verzeichnis",
+      "total_size": "Gesamtgröße",
+      "total_files": "Gesamte Dateien",
+      "images": "Bilder",
+      "gifs": "GIFs",
+      "videos": "Videos",
+      "other_files": "Andere Dateien",
+      "files": "Dateien"
+    },
+    "system_health": {
+      "title": "Systemzustand",
+      "disk_space": "Festplattenspeicher",
+      "cpu_usage": "CPU-Auslastung",
+      "php_status": "PHP-Status",
+      "healthy": "Gesund",
+      "low_space": "Wenig Speicher",
+      "normal": "Normal",
+      "high": "Hoch",
+      "no_errors": "Keine Fehler",
+      "errors_detected": "Fehler erkannt"
+    },
+    "language_switcher": {
+      "select_language": "Sprache auswählen",
+      "current_language": "Aktuelle Sprache"
+    }
+  },
+  "share": {
+    "title": "Freigabe-Verwaltung",
+    "back_to_dashboard": "Zurück zum Dashboard",
+    "create_new_share": "Neue Freigabe erstellen",
+    "select_files": "Dateien oder Ordner auswählen",
+    "drag_drop": "Dateien oder Ordner hierher ziehen und ablegen",
+    "or": "oder",
+    "choose_files": "Dateien auswählen",
+    "choose_folder": "Ordner auswählen",
+    "share_expiration": "Freigabe-Ablauf",
+    "day": "Tag",
+    "days": "Tage",
+    "never": "Nie",
+    "password_protection": "Passwortschutz (Optional)",
+    "enter_password": "Passwort eingeben, um Freigabe zu schützen",
+    "create_share": "Freigabe erstellen",
+    "active_shares": "Aktive Freigaben",
+    "share_id": "Freigabe #",
+    "created": "Erstellt",
+    "expires": "Läuft ab",
+    "files": "Dateien",
+    "preparing_upload": "Upload vorbereiten...",
+    "share_details": "Freigabe-Details",
+    "protected_share": "Geschützte Freigabe",
+    "password_protected": "Diese Freigabe ist passwortgeschützt:",
+    "access_files": "Auf Dateien zugreifen"
+  },
+  "gallery": {
+    "title": "Bildergalerie",
+    "total_files": "Gesamte Dateien",
+    "storage_used": "Verwendeter Speicher"
+  },
+  "logs": {
+    "title": "Protokolle anzeigen"
+  }
+}
+

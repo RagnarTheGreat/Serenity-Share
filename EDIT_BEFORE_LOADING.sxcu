@@ -1,0 +1,16 @@
+    {
+      "Version": "16.1.0",
+      "Name": "Serenity Share",
+      "DestinationType": "ImageUploader",
+      "RequestMethod": "POST",
+      "RequestURL": "https://YOURDOMAIN.COM/upload.php",
+      "Body": "MultipartFormData",
+      "Arguments": {
+        "secret": "THIS-IS-THE-PASSWORD-YOU-SET-IN-CONFIG.PHP-SO-MAKE_IT-MATCH"
+      },
+      "FileFormName": "sharex",
+      "URL": "{json:url}",
+      "ThumbnailURL": "",
+      "DeletionURL": null,
+      "ErrorMessage": ""
+    }
