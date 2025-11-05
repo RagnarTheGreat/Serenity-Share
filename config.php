@@ -1,6 +1,6 @@
 <?php
 $config = array(
-    'domain_url' => 'https://YOURDOMAIN',
+    'domain_url' => 'https://YOURDOMAIN/', // make sure there is a / at the end of the domain
     'upload_dir' => 'img/',
     'share_dir' => 'shares/',
     'secret_key' => 'SHAREX-SECRET-KEY',
