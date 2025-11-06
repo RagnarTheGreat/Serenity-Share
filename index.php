@@ -298,6 +298,11 @@
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
         }
 
+        .button[style*="#5865F2"]:hover {
+            background: #4752C4 !important;
+            box-shadow: 0 0 15px rgba(88, 101, 242, 0.3);
+        }
+
         footer {
             background: var(--secondary-color);
             color: var(--white);
@@ -880,7 +885,12 @@
             <img src="assets/images/logo.png" alt="Serenity Share Logo" class="logo">
             <h1>Serenity Share</h1>
             <p>Free web-based file and image hosting solution. Easy to deploy, secure by design.</p>
-            <a href="https://github.com/RagnarTheGreat/Serenity-Share" class="button">Get Started</a>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
+                <a href="https://github.com/RagnarTheGreat/Serenity-Share" class="button">Get Started</a>
+                <a href="https://discord.gg/Jq9qjt87hE" class="button" target="_blank" rel="noopener noreferrer" style="background: #5865F2;">
+                    <i class="fab fa-discord"></i> Join Discord
+                </a>
+            </div>
         </div>
     </section>
 
@@ -1048,6 +1058,31 @@
         </div>
     </section>
 
+    <section class="hosting-advice">
+        <div class="container">
+            <div class="section-title">
+                <h2>Need Hosting Support?</h2>
+                <p>Our recommended host is <a href="https://breezehost.io/" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none;">BreezeHost</a> - Get reliable hosting for Serenity Share!</p>
+            </div>
+            <div class="hosting-contact-buttons">
+                <a href="https://breezehost.io/" class="hosting-button" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-server"></i>
+                    Visit BreezeHost
+                </a>
+                <a href="https://discord.gg/Jq9qjt87hE" class="hosting-button" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-discord"></i>
+                    Join Our Discord for Hosting Support
+                </a>
+            </div>
+            <div style="text-align: center; margin-top: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <p style="color: var(--text-light); font-size: 1.1em;">
+                    Our Discord community is ready to help you with hosting setup, deployment assistance, and technical support. 
+                    Join us today and get expert help with your Serenity Share installation!
+                </p>
+            </div>
+        </div>
+    </section>
+
     <div id="imageModal" class="modal" onclick="closeModal()">
         <img id="modalImage" src="" alt="Enlarged Screenshot">
     </div>
@@ -1070,7 +1105,7 @@
         <div class="container">
             <p>© 2024 Serenity Share - Self-Hosted File and Image Sharing Solution</p>
             <div class="social-links">
-                <a href="https://discord.gg/Bp9FqPEcuB" class="discord" title="Join our Discord">
+                <a href="https://discord.gg/Jq9qjt87hE" class="discord" title="Join our Discord for Hosting Support">
                     <i class="fa-brands fa-discord"></i>
                 </a>
             </div>
