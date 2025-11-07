@@ -690,6 +690,35 @@ if (isset($_SESSION['logged_in'])) {
                         </div>
                     </div>
                 </div>
+
+                <div class="dashboard-card">
+                    <h2><span class="icon">💾</span> <?php echo t('admin.backup.title', 'Backup & Restore'); ?></h2>
+                    <div class="info-container">
+                        <div class="info-group">
+                            <p style="margin-bottom: 20px; color: #666;">
+                                <?php echo t('admin.backup.description', 'Create backups of all images, shares, and links. Restore from previous backups when needed.'); ?>
+                            </p>
+                            
+                            <div style="margin-bottom: 20px;">
+                                <button id="create-backup-btn" class="button button-primary" style="margin-right: 10px;">
+                                    <?php echo t('admin.backup.create_backup', 'Create Backup'); ?>
+                                </button>
+                                <label for="upload-backup-input" class="button button-primary" style="margin-right: 10px; cursor: pointer; display: inline-block;">
+                                    <?php echo t('admin.backup.upload_backup', 'Upload Backup'); ?>
+                                    <input type="file" id="upload-backup-input" accept=".zip" style="display: none;">
+                                </label>
+                                <span id="backup-status" style="display: none; margin-left: 10px; color: #666;"></span>
+                            </div>
+                            
+                            <div id="backup-list-container">
+                                <h3 style="margin-top: 20px; margin-bottom: 10px;"><?php echo t('admin.backup.existing_backups', 'Existing Backups'); ?></h3>
+                                <div id="backup-list" style="max-height: 400px; overflow-y: auto;">
+                                    <p style="color: #999; text-align: center; padding: 20px;"><?php echo t('admin.backup.loading', 'Loading backups...'); ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="toast-container"></div>
@@ -707,12 +736,307 @@ if (isset($_SESSION['logged_in'])) {
         <?php unset($_SESSION['error']); endif; ?>
         
         <script>
+            /**
+             * Shows a toast notification
+             * @param {string} message - The message to display
+             * @param {string} type - The type of toast (info, success, error, warning)
+             * @param {number} duration - How long to display the toast in ms
+             */
+            function showToast(message, type = "info", duration = 3000) {
+                const container = document.getElementById("toast-container");
+                if (!container) {
+                    console.error("Toast container not found");
+                    return;
+                }
+                
+                const toast = document.createElement("div");
+                toast.className = `toast ${type}`;
+                toast.style.animation = "slideIn 0.3s ease-out";
+                
+                // Select icon based on type
+                let icon = "🔔";
+                switch (type) {
+                    case "success":
+                        icon = "✅";
+                        break;
+                    case "error":
+                        icon = "❌";
+                        break;
+                    case "warning":
+                        icon = "⚠";
+                        break;
+                }
+                
+                toast.innerHTML = `<span class="toast-icon">${icon}</span><span class="toast-message">${message}</span>`;
+                container.appendChild(toast);
+                
+                // Remove the toast after duration
+                setTimeout(() => {
+                    toast.style.animation = "slideOut 0.3s ease-out forwards";
+                    setTimeout(() => {
+                        if (container.contains(toast)) {
+                            container.removeChild(toast);
+                        }
+                    }, 300);
+                }, duration);
+            }
+
             function changeLanguage(lang) {
                 // Redirect to set_language.php with the selected language
                 // Use just the page name to avoid URL encoding issues
                 const currentPage = window.location.pathname.split('/').pop() || 'admin.php';
                 window.location.href = 'set_language.php?lang=' + lang + '&redirect=' + encodeURIComponent(currentPage);
             }
+
+            // Backup and Restore functionality
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+            
+            // Load backup list on page load
+            function loadBackupList() {
+                fetch('backup_handler.php?action=list')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('HTTP error! status: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            displayBackupList(data.backups);
+                        } else {
+                            document.getElementById('backup-list').innerHTML = 
+                                '<p style="color: #dc3545; text-align: center; padding: 20px;">' + 
+                                escapeHtml(data.error || '<?php echo t('admin.backup.load_failed', 'Failed to load backups'); ?>') + '</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading backups:', error);
+                        document.getElementById('backup-list').innerHTML = 
+                            '<p style="color: #dc3545; text-align: center; padding: 20px;"><?php echo t('admin.backup.load_error', 'Error loading backups'); ?>: ' + escapeHtml(error.message) + '</p>';
+                    });
+            }
+
+            function displayBackupList(backups) {
+                const container = document.getElementById('backup-list');
+                
+                if (backups.length === 0) {
+                    container.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;"><?php echo t('admin.backup.no_backups', 'No backups found'); ?></p>';
+                    return;
+                }
+                
+                let html = '<table style="width: 100%; border-collapse: collapse;">';
+                html += '<thead><tr style="border-bottom: 2px solid #ddd;">';
+                html += '<th style="padding: 10px; text-align: left;"><?php echo t('admin.backup.filename', 'Filename'); ?></th>';
+                html += '<th style="padding: 10px; text-align: left;"><?php echo t('admin.backup.size', 'Size'); ?></th>';
+                html += '<th style="padding: 10px; text-align: left;"><?php echo t('admin.backup.created', 'Created'); ?></th>';
+                html += '<th style="padding: 10px; text-align: right;"><?php echo t('admin.backup.actions', 'Actions'); ?></th>';
+                html += '</tr></thead><tbody>';
+                
+                backups.forEach(backup => {
+                    html += '<tr style="border-bottom: 1px solid #eee;">';
+                    html += '<td style="padding: 10px;">' + escapeHtml(backup.filename) + '</td>';
+                    html += '<td style="padding: 10px;">' + backup.formatted_size + '</td>';
+                    html += '<td style="padding: 10px;">' + backup.formatted_date + '</td>';
+                    html += '<td style="padding: 10px; text-align: right;">';
+                    html += '<button class="button button-primary" style="margin-right: 5px; padding: 5px 10px; font-size: 0.9em;" onclick="restoreBackup(\'' + escapeHtml(backup.filename) + '\')"><?php echo t('admin.backup.restore', 'Restore'); ?></button>';
+                    html += '<button class="button button-danger" style="padding: 5px 10px; font-size: 0.9em;" onclick="deleteBackup(\'' + escapeHtml(backup.filename) + '\')"><?php echo t('admin.backup.delete', 'Delete'); ?></button>';
+                    html += '</td>';
+                    html += '</tr>';
+                });
+                
+                html += '</tbody></table>';
+                container.innerHTML = html;
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // Create backup
+            document.getElementById('create-backup-btn').addEventListener('click', function() {
+                const btn = this;
+                const status = document.getElementById('backup-status');
+                
+                btn.disabled = true;
+                btn.textContent = '<?php echo t('admin.backup.creating', 'Creating...'); ?>';
+                status.style.display = 'inline';
+                status.textContent = '';
+                
+                const formData = new FormData();
+                formData.append('action', 'create');
+                formData.append('csrf_token', csrfToken);
+                
+                fetch('backup_handler.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error! status: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        status.textContent = '<?php echo t('admin.backup.created_success', 'Backup created successfully!'); ?>';
+                        status.style.color = '#28a745';
+                        showToast('<?php echo t('admin.backup.backup_created', 'Backup created successfully'); ?>', 'success');
+                        loadBackupList();
+                    } else {
+                        const errorMsg = data.error || '<?php echo t('admin.backup.create_failed', 'Failed to create backup'); ?>';
+                        status.textContent = errorMsg;
+                        status.style.color = '#dc3545';
+                        showToast(errorMsg, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error creating backup:', error);
+                    const errorMsg = '<?php echo t('admin.backup.create_failed', 'Failed to create backup'); ?>: ' + error.message;
+                    status.textContent = errorMsg;
+                    status.style.color = '#dc3545';
+                    showToast(errorMsg, 'error');
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.textContent = '<?php echo t('admin.backup.create_backup', 'Create Backup'); ?>';
+                    setTimeout(() => {
+                        status.style.display = 'none';
+                    }, 5000);
+                });
+            });
+
+            // Restore backup
+            function restoreBackup(filename) {
+                if (!confirm('<?php echo t('admin.backup.restore_confirm', 'Are you sure you want to restore from this backup? This will overwrite existing data.'); ?>')) {
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('action', 'restore');
+                formData.append('filename', filename);
+                formData.append('csrf_token', csrfToken);
+                
+                fetch('backup_handler.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('<?php echo t('admin.backup.restored_success', 'Backup restored successfully'); ?>', 'success');
+                        loadBackupList();
+                    } else {
+                        showToast(data.error || '<?php echo t('admin.backup.restore_failed', 'Failed to restore backup'); ?>', 'error');
+                    }
+                })
+                .catch(error => {
+                    showToast('<?php echo t('admin.backup.restore_failed', 'Failed to restore backup'); ?>', 'error');
+                });
+            }
+
+            // Delete backup
+            function deleteBackup(filename) {
+                if (!confirm('<?php echo t('admin.backup.delete_confirm', 'Are you sure you want to delete this backup? This action cannot be undone.'); ?>')) {
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('action', 'delete');
+                formData.append('filename', filename);
+                formData.append('csrf_token', csrfToken);
+                
+                fetch('backup_handler.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('<?php echo t('admin.backup.deleted_success', 'Backup deleted successfully'); ?>', 'success');
+                        loadBackupList();
+                    } else {
+                        showToast(data.error || '<?php echo t('admin.backup.delete_failed', 'Failed to delete backup'); ?>', 'error');
+                    }
+                })
+                .catch(error => {
+                    showToast('<?php echo t('admin.backup.delete_failed', 'Failed to delete backup'); ?>', 'error');
+                });
+            }
+
+            // Upload backup file
+            document.getElementById('upload-backup-input').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                if (!file.name.endsWith('.zip')) {
+                    showToast('<?php echo t('admin.backup.invalid_file_type', 'Please select a ZIP file'); ?>', 'error');
+                    e.target.value = '';
+                    return;
+                }
+                
+                if (!confirm('<?php echo t('admin.backup.upload_confirm', 'Upload and restore from this backup file? This will overwrite existing data.'); ?>')) {
+                    e.target.value = '';
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('action', 'upload');
+                formData.append('backup_file', file);
+                formData.append('csrf_token', csrfToken);
+                
+                const status = document.getElementById('backup-status');
+                status.style.display = 'inline';
+                status.textContent = '<?php echo t('admin.backup.uploading', 'Uploading...'); ?>';
+                status.style.color = '#666';
+                
+                fetch('backup_handler.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error! status: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        status.textContent = '<?php echo t('admin.backup.uploaded_success', 'Backup uploaded successfully!'); ?>';
+                        status.style.color = '#28a745';
+                        showToast('<?php echo t('admin.backup.backup_uploaded', 'Backup uploaded successfully'); ?>', 'success');
+                        
+                        // Ask if user wants to restore immediately
+                        if (confirm('<?php echo t('admin.backup.restore_now', 'Do you want to restore from this backup now? This will overwrite existing data.'); ?>')) {
+                            restoreBackup(data.filename);
+                        } else {
+                            loadBackupList();
+                        }
+                    } else {
+                        const errorMsg = data.error || '<?php echo t('admin.backup.upload_failed', 'Failed to upload backup'); ?>';
+                        status.textContent = errorMsg;
+                        status.style.color = '#dc3545';
+                        showToast(errorMsg, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error uploading backup:', error);
+                    const errorMsg = '<?php echo t('admin.backup.upload_failed', 'Failed to upload backup'); ?>: ' + error.message;
+                    status.textContent = errorMsg;
+                    status.style.color = '#dc3545';
+                    showToast(errorMsg, 'error');
+                })
+                .finally(() => {
+                    e.target.value = '';
+                    setTimeout(() => {
+                        status.style.display = 'none';
+                    }, 5000);
+                });
+            });
+
+            // Load backup list on page load
+            loadBackupList();
         </script>
     </body>
     </html>
