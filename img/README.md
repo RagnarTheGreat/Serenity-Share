@@ -35,4 +35,4 @@ Files are stored with unique hash-based filenames to prevent conflicts and ensur
 
 - Consider implementing periodic cleanup of old files
 - Monitor disk space usage regularly
-- Backups can be created through the admin panel
+
