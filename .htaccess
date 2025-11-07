@@ -100,6 +100,7 @@ RewriteRule ^img/(.+)\.(jpg|jpeg|png|gif|mp4|webm)$ logger.php?f=$1.$2 [L,QSA]
 
 RewriteEngine On
 RewriteRule ^s/([a-zA-Z0-9]+)$ public_share.php?id=$1 [L,QSA]
+RewriteRule ^l/([a-zA-Z0-9]+)$ l.php?c=$1 [L,QSA]
 
 ErrorDocument 403 /error.php?code=403
 ErrorDocument 404 /templates/error.php
