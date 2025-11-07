@@ -457,6 +457,7 @@ if (isset($_SESSION['logged_in'])) {
                         </div>
                         <a href="gallery.php" class="button button-primary"><?php echo t('admin.buttons.view_gallery', 'View Gallery'); ?></a>
                         <a href="share.php" class="button button-primary"><?php echo t('admin.buttons.share_files', 'Share Files'); ?></a>
+                        <a href="shorten.php" class="button button-primary"><?php echo t('admin.buttons.shorten_links', 'Shorten Links'); ?></a>
                         <a href="?logout=1" class="button button-danger"><?php echo t('admin.buttons.logout', 'Logout'); ?></a>
                     <?php endif; ?>
                 </div>
