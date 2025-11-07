@@ -3,6 +3,7 @@ $config = array(
     'domain_url' => 'https://YOURDOMAIN/', // make sure there is a / at the end of the domain
     'upload_dir' => 'img/',
     'share_dir' => 'shares/',
+    'links_dir' => 'links/',
     'secret_key' => 'SHAREX-SECRET-KEY',
     'max_file_size' => 100 * 1024 * 1024,  // 100MB
     'max_share_size' => 1024 * 1024 * 1024, // 1GB
@@ -25,7 +26,7 @@ $config = array(
 );
 
 // DO NOT TOUCH THIS CODE UNLESS YOU KNOW WHAT YOU'RE DOING 
-$required_dirs = ['upload_dir', 'share_dir'];
+$required_dirs = ['upload_dir', 'share_dir', 'links_dir'];
 foreach ($required_dirs as $dir) {
     if (!file_exists($config[$dir])) {
         mkdir($config[$dir], 0755, true);
