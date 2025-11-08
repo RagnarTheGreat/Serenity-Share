@@ -51,7 +51,7 @@ function getShortenedLinks() {
             $links[] = [
                 'id' => $linkId,
                 'code' => $data['code'],
-                'url' => $config['domain_url'] . 'l/' . $data['code'],
+                'url' => $config['domain_url'] . 'l.php?c=' . $data['code'],
                 'original_url' => $data['original_url'],
                 'created' => $data['created'],
                 'expires' => $data['expires'],
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_link'])) {
             throw new Exception('Failed to save shortened link');
         }
         
-        $shortUrl = $config['domain_url'] . 'l/' . $code;
+        $shortUrl = $config['domain_url'] . 'l.php?c=' . $code;
         
         echo json_encode([
             'success' => true,
