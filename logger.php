@@ -66,9 +66,18 @@ if ($filename && file_exists($filepath)) {
             // Log the access - this happens before any output
             try {
                 logImageAccess($filename);
+                // Debug: log that we attempted to log (only in debug mode)
+                if ($config['debug']) {
+                    error_log("Image access logged: " . $filename . " from IP: " . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
+                }
             } catch (Exception $e) {
-                // Silently fail - don't break image serving
-                error_log("Failed to log image access: " . $e->getMessage());
+                // Log the error for debugging
+                error_log("Failed to log image access for " . $filename . ": " . $e->getMessage());
+            }
+        } else {
+            // Debug: log when bot is detected (only in debug mode)
+            if ($config['debug']) {
+                error_log("Bot detected, skipping log: " . $filename . " - UA: " . ($userAgent ?: 'empty'));
             }
         }
     }
