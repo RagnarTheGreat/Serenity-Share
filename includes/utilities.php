@@ -526,5 +526,103 @@ function sendDiscordNotification($filename, $fileUrl) {
     curl_exec($ch);
     curl_close($ch);
 }
+
+/**
+ * Get the client's real IP address
+ * Handles proxies and load balancers
+ */
+function getClientIP() {
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    
+    // Check for forwarded IP (from proxy/load balancer)
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $forwarded = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        // X-Forwarded-For can contain multiple IPs, get the first one
+        $ips = explode(',', $forwarded);
+        $ip = trim($ips[0]);
+    } elseif (isset($_SERVER['HTTP_X_REAL_IP'])) {
+        $ip = $_SERVER['HTTP_X_REAL_IP'];
+    } elseif (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+        // Cloudflare
+        $ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+    }
+    
+    // Validate IP address
+    if (filter_var($ip, FILTER_VALIDATE_IP)) {
+        return $ip;
+    }
+    
+    return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+}
+
+/**
+ * Log image access with IP address
+ * This function logs silently - errors won't prevent image serving
+ */
+function logImageAccess($filename) {
+    try {
+        $logFile = __DIR__ . '/../logs/image_access.json';
+        $logDir = dirname($logFile);
+        
+        // Ensure logs directory exists
+        if (!is_dir($logDir)) {
+            @mkdir($logDir, 0755, true);
+        }
+        
+        // Get client IP
+        $ip = getClientIP();
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown';
+        $referer = $_SERVER['HTTP_REFERER'] ?? 'Direct';
+        $timestamp = time();
+        
+        // Create log entry
+        $logEntry = [
+            'timestamp' => $timestamp,
+            'datetime' => date('Y-m-d H:i:s', $timestamp),
+            'filename' => $filename,
+            'ip' => $ip,
+            'user_agent' => $userAgent,
+            'referer' => $referer
+        ];
+        
+        // Read existing logs
+        $logs = [];
+        if (file_exists($logFile)) {
+            $content = @file_get_contents($logFile);
+            if ($content) {
+                $decoded = @json_decode($content, true);
+                if (is_array($decoded)) {
+                    $logs = $decoded;
+                }
+            }
+        }
+        
+        // Add new log entry at the beginning
+        array_unshift($logs, $logEntry);
+        
+        // Keep only last 10000 entries to prevent file from growing too large
+        if (count($logs) > 10000) {
+            $logs = array_slice($logs, 0, 10000);
+        }
+        
+        // Write logs back to file (use file locking to prevent race conditions)
+        $fp = @fopen($logFile, 'c+');
+        if ($fp) {
+            if (flock($fp, LOCK_EX)) {
+                ftruncate($fp, 0);
+                fwrite($fp, json_encode($logs, JSON_PRETTY_PRINT));
+                fflush($fp);
+                flock($fp, LOCK_UN);
+            }
+            fclose($fp);
+        } else {
+            // Fallback to file_put_contents if fopen fails
+            @file_put_contents($logFile, json_encode($logs, JSON_PRETTY_PRINT), LOCK_EX);
+        }
+    } catch (Exception $e) {
+        // Silently fail - don't prevent image serving if logging fails
+        error_log("Image access logging failed: " . $e->getMessage());
+    }
+}
 ?>
 
