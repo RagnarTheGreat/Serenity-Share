@@ -55,8 +55,12 @@ RewriteBase /
 # Prevent directory listing
 Options -Indexes
 
-# Route image/video requests through logger
-RewriteRule ^img/(.+)\.(jpg|jpeg|png|gif|mp4|webm)$ logger.php?f=$1.$2 [L,QSA]
+# Block direct access to img directory - force all requests through logger.php
+<IfModule mod_rewrite.c>
+    # First, route ALL image/video requests through logger.php for tracking
+    RewriteCond %{REQUEST_URI} ^/img/.*\.(jpg|jpeg|png|gif|mp4|webm)$ [NC]
+    RewriteRule ^img/(.+)$ logger.php?f=$1 [L,QSA]
+</IfModule>
 
 # Browser caching
 <IfModule mod_expires.c>
@@ -96,9 +100,7 @@ RewriteRule ^img/(.+)\.(jpg|jpeg|png|gif|mp4|webm)$ logger.php?f=$1.$2 [L,QSA]
     AddOutputFilterByType DEFLATE application/javascript
     AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
-
-
-RewriteEngine On
+# Short URL rewrites
 RewriteRule ^s/([a-zA-Z0-9]+)$ public_share.php?id=$1 [L,QSA]
 RewriteRule ^l/([a-zA-Z0-9]+)$ l.php?c=$1 [L,QSA]
 
