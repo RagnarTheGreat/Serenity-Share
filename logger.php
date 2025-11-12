@@ -19,8 +19,59 @@ $filename = isset($_GET['f']) ? basename($_GET['f']) : '';
 $filepath = $config['upload_dir'] . $filename;
 
 if ($filename && file_exists($filepath)) {
-
+    // Log image access with IP address
     $extension = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
+    
+    // Only log image types (not videos)
+    if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
+        // Check if this is a bot/crawler request (like Discord, search engines, etc.)
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $isBot = false;
+        
+        // Skip logging if no user agent (likely a bot)
+        if (empty($userAgent)) {
+            $isBot = true;
+        } else {
+            // List of specific bot user agents to exclude from logging
+            // These are checked in order - more specific patterns first
+            $botPatterns = [
+                'discordbot',           // Discord bot (most common for this use case)
+                'facebookexternalhit',   // Facebook link preview
+                'twitterbot',            // Twitter bot
+                'linkedinbot',           // LinkedIn bot
+                'whatsapp',              // WhatsApp link preview
+                'telegrambot',           // Telegram bot
+                'slackbot',              // Slack bot
+                'googlebot',             // Google crawler
+                'bingbot',               // Bing crawler
+                'yandexbot',             // Yandex crawler
+                'baiduspider',           // Baidu crawler
+                'crawler',               // Generic crawler
+                'spider',                // Generic spider
+                'scraper'                // Generic scraper
+            ];
+            
+            // Check if user agent matches any bot pattern
+            $userAgentLower = strtolower($userAgent);
+            foreach ($botPatterns as $pattern) {
+                if (strpos($userAgentLower, $pattern) !== false) {
+                    $isBot = true;
+                    break;
+                }
+            }
+        }
+        
+        // Only log if it's not a bot (real user browser access)
+        if (!$isBot) {
+            // Log the access - this happens before any output
+            try {
+                logImageAccess($filename);
+            } catch (Exception $e) {
+                // Silently fail - don't break image serving
+                error_log("Failed to log image access: " . $e->getMessage());
+            }
+        }
+    }
     
    
     while (ob_get_level()) {
