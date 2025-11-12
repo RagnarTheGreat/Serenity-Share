@@ -24,6 +24,30 @@
     transform: translateY(-5px)
 }
 
+.gallery-media {
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--element-bg);
+}
+
+.gallery-media a {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.gallery-img,
+.gallery-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .gallery-list .gallery-item {
     display: flex;
     gap: 20px;
