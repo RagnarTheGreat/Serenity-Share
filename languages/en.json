@@ -131,7 +131,25 @@
     "storage_used": "Storage Used"
   },
   "logs": {
-    "title": "View Logs"
+    "title": "View Logs",
+    "image_access_logs": "Image Access Logs",
+    "total_entries": "Total",
+    "filter_by_ip": "Filter by IP address",
+    "filter_by_filename": "Filter by filename",
+    "apply_filters": "Apply Filters",
+    "clear_filters": "Clear Filters",
+    "clear_all_logs": "Clear All Logs",
+    "delete_selected": "Delete Selected",
+    "date_time": "Date & Time",
+    "ip_address": "IP Address",
+    "filename": "Filename",
+    "user_agent": "User Agent",
+    "referer": "Referer",
+    "no_logs": "No logs found.",
+    "clear_confirm": "Are you sure you want to clear all logs? This action cannot be undone.",
+    "delete_confirm": "Are you sure you want to delete {count} log entry/entries?",
+    "logs_cleared": "All logs cleared successfully",
+    "logs_deleted": "Selected logs deleted successfully"
   },
   "shorten": {
     "title": "Link Shortener",
