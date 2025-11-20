@@ -7,6 +7,7 @@
       "system_health": "システム状態"
     },
     "buttons": {
+      "home": "ホーム",
       "view_gallery": "ギャラリーを表示",
       "view_logs": "ログを表示",
       "share_files": "ファイルを共有",
