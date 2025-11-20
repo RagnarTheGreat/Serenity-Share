@@ -405,12 +405,10 @@ if (isset($_GET['id'])) {
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     </head>
     <body>
+        <?php require_once('includes/navigation.php'); ?>
         <div class="container">
-            <div class="header">
+            <div class="page-header">
                 <h1><?php echo t('share.title', 'Share Management'); ?></h1>
-                <a href="admin.php" class="button">
-                    <i class="fas fa-arrow-left"></i> <?php echo t('share.back_to_dashboard', 'Back to Dashboard'); ?>
-                </a>
             </div>
 
             <div class="section">
@@ -565,12 +563,10 @@ if (isset($_GET['download_all'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
+    <?php require_once('includes/navigation.php'); ?>
     <div class="container">
-        <div class="header">
+        <div class="page-header">
             <h1><?php echo t('share.title', 'Share Management'); ?></h1>
-            <a href="admin.php" class="button button-primary">
-                <i class="fas fa-chevron-left"></i> <?php echo t('share.back_to_dashboard', 'Back to Dashboard'); ?>
-            </a>
         </div>
 
         <div class="section">
