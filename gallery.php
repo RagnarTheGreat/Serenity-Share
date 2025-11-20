@@ -236,10 +236,12 @@ if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
     <title><?php echo t('gallery.title', 'Image Gallery'); ?> - Page <?php echo $current_page; ?></title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/gallery.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+    <?php require_once('includes/navigation.php'); ?>
     <div class="container">
-        <div class="header">
+        <div class="page-header">
             <h1><?php echo t('gallery.title', 'Image Gallery'); ?></h1>
             <div class="header-info">
                 <span class="page-info">
@@ -247,7 +249,6 @@ if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
                     (<?php echo number_format($total_items); ?> <?php echo t('gallery.total_files', 'total files'); ?>)
                 </span>
             </div>
-            <a href="admin.php" class="button button-primary"><?php echo t('share.back_to_dashboard', 'Back to Dashboard'); ?></a>
         </div>
 
         <div class="gallery-controls">
