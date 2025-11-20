@@ -7,6 +7,7 @@
       "system_health": "Estado do Sistema"
     },
     "buttons": {
+      "home": "Início",
       "view_gallery": "Ver Galeria",
       "view_logs": "Ver Registros",
       "share_files": "Compartilhar Arquivos",
