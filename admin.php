@@ -382,87 +382,11 @@ if (isset($_SESSION['logged_in'])) {
         <link rel="stylesheet" href="assets/css/style.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <meta name="csrf-token" content="<?php echo $_SESSION['csrf_token']; ?>">
-        <style>
-            .language-switcher {
-                display: inline-block;
-                margin-right: 10px;
-            }
-            
-            .language-switcher select {
-                padding: 10px 20px;
-                border: 0;
-                border-radius: 8px;
-                background: var(--primary-color, #4f46e5);
-                color: #fff;
-                font-size: 1rem;
-                font-weight: 500;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                appearance: none;
-                -webkit-appearance: none;
-                -moz-appearance: none;
-                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-                background-repeat: no-repeat;
-                background-position: right 8px center;
-                background-size: 1em;
-                padding-right: 35px;
-            }
-            
-            .language-switcher select:hover {
-                background-color: var(--primary-dark, #4338ca);
-            }
-            
-            .language-switcher select:focus {
-                outline: none;
-                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
-            }
-            
-            .language-switcher select option {
-                background: var(--bg-color, #fff);
-                color: var(--text-color, #000);
-                padding: 8px;
-            }
-            
-            @media (max-width: 768px) {
-                .language-switcher {
-                    width: 100%;
-                    margin-bottom: 10px;
-                    margin-right: 0;
-                }
-                
-                .language-switcher select {
-                    width: 100%;
-                }
-            }
-        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </head>
     <body>
+        <?php require_once('includes/navigation.php'); ?>
         <div class="container">
-            <div class="header">
-                <h1><?php echo t('admin.dashboard.title', 'Admin Dashboard'); ?></h1>
-                <div class="header-actions">
-                    <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
-                        <div class="language-switcher">
-                            <select id="language-select" onchange="changeLanguage(this.value)">
-                                <?php 
-                                $current_lang = getCurrentLanguage();
-                                $languages = getSupportedLanguages();
-                                foreach ($languages as $code => $name): 
-                                ?>
-                                    <option value="<?php echo $code; ?>" <?php echo $current_lang === $code ? 'selected' : ''; ?>>
-                                        <?php echo htmlspecialchars($name); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <a href="gallery.php" class="button button-primary"><?php echo t('admin.buttons.view_gallery', 'View Gallery'); ?></a>
-                        <a href="logs.php" class="button button-primary"><?php echo t('admin.buttons.view_logs', 'View Logs'); ?></a>
-                        <a href="share.php" class="button button-primary"><?php echo t('admin.buttons.share_files', 'Share Files'); ?></a>
-                        <a href="shorten.php" class="button button-primary"><?php echo t('admin.buttons.shorten_links', 'Shorten Links'); ?></a>
-                        <a href="?logout=1" class="button button-danger"><?php echo t('admin.buttons.logout', 'Logout'); ?></a>
-                    <?php endif; ?>
-                </div>
-            </div>
 
 
             <div class="dashboard-grid">
@@ -782,12 +706,6 @@ if (isset($_SESSION['logged_in'])) {
                 }, duration);
             }
 
-            function changeLanguage(lang) {
-                // Redirect to set_language.php with the selected language
-                // Use just the page name to avoid URL encoding issues
-                const currentPage = window.location.pathname.split('/').pop() || 'admin.php';
-                window.location.href = 'set_language.php?lang=' + lang + '&redirect=' + encodeURIComponent(currentPage);
-            }
 
             // Backup and Restore functionality
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
