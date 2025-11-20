@@ -237,8 +237,63 @@ if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/gallery.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="assets/js/gallery.js?v=<?php echo filemtime('assets/js/gallery.js'); ?>" defer></script>
 </head>
 <body>
+    <!-- Modals and Dialogs - Must be before container to ensure they're always rendered -->
+    <div id="upload-dialog" class="upload-dialog" style="display: none;">
+        <div class="upload-content">
+            <div class="upload-header">
+                <h2>Upload Files</h2>
+                <button onclick="hideUploadDialog()" class="close-button">×</button>
+            </div>
+            <div class="upload-zone" id="drop-zone">
+                <div class="upload-message">
+                    <span class="icon">📁</span>
+                    <p>Drag and drop files here</p>
+                    <p>or</p>
+                    <button class="button button-primary">Choose Files</button>
+                    <p class="upload-info">Supported formats: JPG, PNG, GIF, MP4, WEBM</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete-dialog" class="delete-dialog" style="display: none;">
+        <h3>Confirm Deletion</h3>
+        <p>Are you sure you want to delete the selected files? This action cannot be undone.</p>
+        <div class="delete-dialog-buttons">
+            <button class="button-cancel" onclick="hideDeleteDialog()">Cancel</button>
+            <button class="button-confirm-delete" onclick="proceedWithDelete()">Delete</button>
+        </div>
+    </div>
+    <div id="delete-dialog-overlay" class="delete-dialog-overlay" style="display: none;" onclick="hideDeleteDialog()"></div>
+
+    <!-- QR Code Modal -->
+    <div id="qr-modal" class="qr-modal" style="display: none;">
+        <div class="qr-modal-content">
+            <div class="qr-modal-header">
+                <h3 id="qr-modal-title">QR Code</h3>
+                <button class="qr-modal-close" onclick="hideQRCode()">&times;</button>
+            </div>
+            <div class="qr-modal-body">
+                <div class="qr-code-container">
+                    <img id="qr-code-image" src="" alt="QR Code" />
+                </div>
+                <div class="qr-url-info">
+                    <p><strong>URL:</strong></p>
+                    <input type="text" id="qr-url-display" readonly class="qr-url-input" />
+                    <button class="button-copy" onclick="copyQRUrl()">Copy URL</button>
+                </div>
+            </div>
+            <div class="qr-modal-footer">
+                <a id="qr-download-link" download="qrcode.png" class="button button-primary">Download QR Code</a>
+                <button class="button" onclick="hideQRCode()">Close</button>
+            </div>
+        </div>
+    </div>
+    <div id="qr-modal-overlay" class="qr-modal-overlay" style="display: none;" onclick="hideQRCode()"></div>
+
     <?php require_once('includes/navigation.php'); ?>
     <div class="container">
         <div class="page-header">
@@ -346,6 +401,11 @@ if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
                                 $date = new DateTime($image['date']);
                                 echo $date->format('Y-m-d H:i:s'); 
                             ?></div>
+                            <div class="gallery-actions">
+                                <button class="button-qr" onclick="showQRCode('<?php echo htmlspecialchars($image['url'], ENT_QUOTES); ?>', '<?php echo htmlspecialchars($image['name'], ENT_QUOTES); ?>')" title="Generate QR Code">
+                                    <span class="qr-icon">📱</span> QR Code
+                                </button>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -378,41 +438,30 @@ if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
             </div>
         </div>
         <?php endif; ?>
-
-        <div id="upload-dialog" class="upload-dialog" style="display: none;">
-            <div class="upload-content">
-                <div class="upload-header">
-                    <h2>Upload Files</h2>
-                    <button onclick="hideUploadDialog()" class="close-button">×</button>
-                </div>
-                <div class="upload-zone" id="drop-zone">
-                    <div class="upload-message">
-                        <span class="icon">📁</span>
-                        <p>Drag and drop files here</p>
-                        <p>or</p>
-                        <button class="button button-primary">Choose Files</button>
-                        <p class="upload-info">Supported formats: JPG, PNG, GIF, MP4, WEBM</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="delete-dialog" class="delete-dialog" style="display: none;">
-            <h3>Confirm Deletion</h3>
-            <p>Are you sure you want to delete the selected files? This action cannot be undone.</p>
-            <div class="delete-dialog-buttons">
-                <button class="button-cancel" onclick="hideDeleteDialog()">Cancel</button>
-                <button class="button-confirm-delete" onclick="proceedWithDelete()">Delete</button>
-            </div>
-        </div>
-        <div id="delete-dialog-overlay" class="delete-dialog-overlay" style="display: none;" onclick="hideDeleteDialog()"></div>
     </div>
 
     <div id="toast-container"></div>
     
     <meta name="secret-key" content="<?php echo $config['secret_key']; ?>">
     
-    <script src="assets/js/gallery.js"></script>
+    <script>
+        // Ensure DOM is ready before accessing elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // All functions should now be available
+            console.log('DOM ready - Functions available:', {
+                toggleAll: typeof toggleAll !== 'undefined',
+                setView: typeof setView !== 'undefined',
+                showUploadDialog: typeof showUploadDialog !== 'undefined',
+                showQRCode: typeof showQRCode !== 'undefined',
+                confirmDelete: typeof confirmDelete !== 'undefined'
+            });
+            console.log('Elements available:', {
+                uploadDialog: !!document.getElementById("upload-dialog"),
+                deleteDialog: !!document.getElementById("delete-dialog"),
+                qrModal: !!document.getElementById("qr-modal")
+            });
+        });
+    </script>
     
     <?php if (isset($_SESSION['message'])): ?>
     <script>
