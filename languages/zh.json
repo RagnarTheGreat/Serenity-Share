@@ -7,6 +7,7 @@
       "system_health": "系统状态"
     },
     "buttons": {
+      "home": "首页",
       "view_gallery": "查看图库",
       "view_logs": "查看日志",
       "share_files": "分享文件",
