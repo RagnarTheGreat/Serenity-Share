@@ -230,6 +230,7 @@ $stats = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo t('logs.title', 'View Logs'); ?> - <?php echo t('admin.dashboard.title', 'Admin Dashboard'); ?></title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta name="csrf-token" content="<?php echo $_SESSION['csrf_token']; ?>">
     <style>
@@ -707,14 +708,8 @@ $stats = [
     </style>
 </head>
 <body>
+    <?php require_once('includes/navigation.php'); ?>
     <div class="container">
-        <div class="header">
-            <h1><?php echo t('logs.title', 'View Logs'); ?></h1>
-            <div class="header-actions">
-                <a href="admin.php" class="button button-primary"><?php echo t('admin.dashboard.title', 'Admin Dashboard'); ?></a>
-                <a href="?logout=1" class="button button-danger"><?php echo t('admin.buttons.logout', 'Logout'); ?></a>
-            </div>
-        </div>
 
         <div class="logs-container">
             <div class="logs-header">
