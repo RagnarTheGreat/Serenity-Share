@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_files'])) {
 }
 
 // Get pagination parameters
-$current_page = max(1, intval($_GET['page'] ?? 1));
+$gallery_current_page = max(1, intval($_GET['page'] ?? 1));
 $items_per_page = ITEMS_PER_PAGE;
 
 // Get all gallery items for counting and sorting
@@ -218,14 +218,14 @@ usort($all_gallery_items, function($a, $b) {
 // Calculate pagination
 $total_items = count($all_gallery_items);
 $total_pages = max(1, ceil($total_items / $items_per_page));
-$current_page = min($current_page, $total_pages); // Ensure current page doesn't exceed total pages
+$gallery_current_page = min($gallery_current_page, $total_pages); // Ensure current page doesn't exceed total pages
 
 // Get items for current page
-$offset = ($current_page - 1) * $items_per_page;
+$offset = ($gallery_current_page - 1) * $items_per_page;
 $gallery_items = array_slice($all_gallery_items, $offset, $items_per_page);
 
 // Calculate pagination links
-$start_page = max(1, $current_page - floor(MAX_PAGINATION_LINKS / 2));
+$start_page = max(1, $gallery_current_page - floor(MAX_PAGINATION_LINKS / 2));
 $end_page = min($total_pages, $start_page + MAX_PAGINATION_LINKS - 1);
 
 // Adjust start_page if we're near the end
@@ -240,7 +240,7 @@ if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo t('gallery.title', 'Image Gallery'); ?> - Page <?php echo $current_page; ?></title>
+    <title><?php echo t('gallery.title', 'Image Gallery'); ?> - Page <?php echo $gallery_current_page; ?></title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/gallery.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -307,7 +307,7 @@ if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
             <h1><?php echo t('gallery.title', 'Image Gallery'); ?></h1>
             <div class="header-info">
                 <span class="page-info">
-                    Page <?php echo $current_page; ?> of <?php echo $total_pages; ?> 
+                    Page <?php echo $gallery_current_page; ?> of <?php echo $total_pages; ?> 
                     (<?php echo number_format($total_items); ?> <?php echo t('gallery.total_files', 'total files'); ?>)
                 </span>
             </div>
@@ -362,7 +362,7 @@ if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
             <div class="stat-card">
                 <div class="stat-title">📄 Current Page</div>
                 <div class="stat-value">
-                    <?php echo count($gallery_items); ?> of <?php echo $items_per_page; ?> items
+                    Page <?php echo $gallery_current_page; ?> (<?php echo count($gallery_items); ?> items)
                 </div>
             </div>
         </div>
@@ -376,7 +376,7 @@ if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
                         <span class="no-items-icon">📁</span>
                         <h3>No files found</h3>
                         <p>There are no files to display on this page.</p>
-                        <?php if ($current_page > 1): ?>
+                        <?php if ($gallery_current_page > 1): ?>
                             <a href="?page=1" class="button button-primary">Go to First Page</a>
                         <?php endif; ?>
                     </div>
@@ -422,21 +422,21 @@ if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
         <?php if ($total_pages > 1): ?>
         <div class="pagination-bottom">
             <div class="pagination">
-                <?php if ($current_page > 1): ?>
+                <?php if ($gallery_current_page > 1): ?>
                     <a href="?page=1" class="pagination-link">« First</a>
-                    <a href="?page=<?php echo $current_page - 1; ?>" class="pagination-link">‹ Previous</a>
+                    <a href="?page=<?php echo $gallery_current_page - 1; ?>" class="pagination-link">‹ Previous</a>
                 <?php endif; ?>
 
                 <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
-                    <?php if ($i == $current_page): ?>
+                    <?php if ($i == $gallery_current_page): ?>
                         <span class="pagination-link pagination-current"><?php echo $i; ?></span>
                     <?php else: ?>
                         <a href="?page=<?php echo $i; ?>" class="pagination-link"><?php echo $i; ?></a>
                     <?php endif; ?>
                 <?php endfor; ?>
 
-                <?php if ($current_page < $total_pages): ?>
-                    <a href="?page=<?php echo $current_page + 1; ?>" class="pagination-link">Next ›</a>
+                <?php if ($gallery_current_page < $total_pages): ?>
+                    <a href="?page=<?php echo $gallery_current_page + 1; ?>" class="pagination-link">Next ›</a>
                     <a href="?page=<?php echo $total_pages; ?>" class="pagination-link">Last »</a>
                 <?php endif; ?>
             </div>
