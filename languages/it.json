@@ -7,6 +7,7 @@
       "system_health": "Stato del Sistema"
     },
     "buttons": {
+      "home": "Home",
       "view_gallery": "Visualizza Galleria",
       "view_logs": "Visualizza Registri",
       "share_files": "Condividi File",
