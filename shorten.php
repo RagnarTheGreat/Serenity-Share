@@ -323,12 +323,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_link'])) {
     </style>
 </head>
 <body>
+    <?php require_once('includes/navigation.php'); ?>
     <div class="container">
-        <div class="header">
+        <div class="page-header">
             <h1><?php echo t('shorten.title', 'Link Shortener'); ?></h1>
-            <a href="admin.php" class="button button-primary">
-                <i class="fas fa-chevron-left"></i> <?php echo t('shorten.back_to_dashboard', 'Back to Dashboard'); ?>
-            </a>
         </div>
 
         <div class="section">
