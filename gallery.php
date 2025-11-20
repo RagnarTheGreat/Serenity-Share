@@ -30,6 +30,13 @@ error_log("Gallery.php: getCurrentLanguage() returns: " . getCurrentLanguage());
 reloadTranslations();
 error_log("Gallery.php: After reloadTranslations(), getCurrentLanguage() returns: " . getCurrentLanguage());
 
+// Logout handling - must be before validateSession check
+if (isset($_GET['logout'])) {
+    destroySession();
+    header('Location: admin.php');
+    exit;
+}
+
 // Check if user is logged in
 if (!validateSession()) {
     error_log("Session validation failed");
