@@ -9,14 +9,41 @@ ini_set('log_errors', 1);
 
 require_once('config.php');
 
-// Check if vendor/autoload.php exists
-if (!file_exists('vendor/autoload.php')) {
-    http_response_code(500);
-    header('Content-Type: text/plain');
-    die('QR Code library not found. Please run: composer install');
+// Try to find vendor/autoload.php in multiple possible locations
+$vendorPath = null;
+$possiblePaths = [
+    __DIR__ . '/vendor/autoload.php',  // Same directory as qr_code.php
+    dirname(__DIR__) . '/vendor/autoload.php',  // Parent directory
+    'vendor/autoload.php',  // Relative path
+];
+
+foreach ($possiblePaths as $path) {
+    if (file_exists($path)) {
+        $vendorPath = $path;
+        break;
+    }
 }
 
-require_once('vendor/autoload.php');
+// Check if vendor/autoload.php exists
+if (!$vendorPath) {
+    http_response_code(500);
+    header('Content-Type: text/plain');
+    
+    // Provide helpful error message with installation instructions
+    $errorMsg = "QR Code library not found.\n\n";
+    $errorMsg .= "The vendor directory is missing. This usually happens when:\n";
+    $errorMsg .= "1. Files were uploaded without the vendor directory\n";
+    $errorMsg .= "2. The vendor directory wasn't included in the download\n\n";
+    $errorMsg .= "SOLUTION:\n";
+    $errorMsg .= "Make sure you upload ALL files including the 'vendor' folder.\n";
+    $errorMsg .= "The vendor folder should be in the same directory as qr_code.php\n";
+    $errorMsg .= "If vendor folder is missing, re-download from GitHub (vendor folder should be included)\n";
+    
+    error_log('QR Code Error: vendor/autoload.php not found. Checked paths: ' . implode(', ', $possiblePaths));
+    die($errorMsg);
+}
+
+require_once($vendorPath);
 
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
