@@ -26,33 +26,45 @@ A free, open source, self-hosted file and image sharing solution with ShareX int
 
 ## Quick Start
 
-1. Download the files to your web server
-2. Edit `config.php` with your domain and settings
-3. Generate a password hash using `yourdomain/hash_password.php`
-4. Update the admin password in `config.php` with the generated hash
-5. Access `/admin.php` to manage your files
-6. Import `EDIT_BEFORE_LOADING.sxcu` into ShareX
-7. Start uploading!
+1. **Download ALL files** from GitHub (including the `vendor` folder - this is required for QR codes!)
+2. Upload everything to your web server (drag and drop works if you include the `vendor` folder)
+3. Edit `config.php` with your domain and settings
+4. Generate a password hash using `yourdomain/hash_password.php`
+5. Update the admin password in `config.php` with the generated hash
+6. Access `/admin.php` to manage your files
+7. Import `EDIT_BEFORE_LOADING.sxcu` into ShareX
+8. Start uploading!
+
+**Important:** The `vendor` folder must be included when downloading/uploading files. If QR codes don't work, visit `check_qr_setup.php` to diagnose the issue.
 
 ## Requirements
 
-- PHP 7.4 or higher
+- PHP 8.1 or higher (required for QR code generation)
 - MySQL 5.7+ or MariaDB 10.3+
 - Web server (Apache/Nginx)
+- PHP GD extension (for image manipulation and QR codes)
+- Composer (for installing QR code dependencies)
 - Minimum 1GB RAM (2GB recommended)
 - DirectAdmin compatible (recommended)
 
 ## Installation
 
 1. Download or clone this repository to your web server
-2. Configure your web server to serve the files
-3. Edit `config.php` with your specific settings:
+2. **Install Composer dependencies** (required for QR code feature):
+   ```bash
+   composer install
+   ```
+   If you don't have Composer, install it from https://getcomposer.org/download/
+3. Configure your web server to serve the files
+4. Edit `config.php` with your specific settings:
    - Update `domain_url` to point to your domain
    - Set a secure random string for `secret_key`
    - Change the admin password (default is "password") using yourdomain/hash_password.php
    - Add your IP to `admin_ips` for admin area access
-4. Make sure upload directories are writable by your web server
-5. Access your site and login to the admin area at `/admin.php`
+5. Make sure upload directories are writable by your web server
+6. Access your site and login to the admin area at `/admin.php`
+
+**Note:** If QR codes are not working, make sure you've run `composer install` and that PHP 8.1+ is installed with the GD extension enabled.
 
 ## Discord Notifications Setup
 
