@@ -6,7 +6,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PHP Version](https://img.shields.io/badge/PHP-8.1%2B-blue.svg)](https://www.php.net/)
-[![MySQL](https://img.shields.io/badge/MySQL-5.7%2B-orange.svg)](https://www.mysql.com/)
 [![Status](https://img.shields.io/badge/Status-Active-success.svg)](https://github.com)
 
 *Built with functionality in mind - easy to deploy on any web host*
@@ -48,6 +47,7 @@
 
 - 🚀 **Easy Deployment** - Get up and running in minutes on any PHP-enabled web host
 - 🔒 **Privacy First** - Self-hosted means your files never leave your server
+- 📁 **No Database Required** - Simple file-based storage, no database setup needed
 - 🎨 **Beautiful UI** - Modern, responsive design with dark theme
 - ⚡ **Fast & Lightweight** - Optimized for performance
 - 🔧 **Highly Customizable** - Extensive configuration options
@@ -108,14 +108,14 @@
 ### Server Requirements
 
 - **PHP** 8.1 or higher (required for QR code generation)
-- **MySQL** 5.7+ or **MariaDB** 10.3+
 - **Web Server** (Apache/Nginx)
 - **PHP Extensions:**
   - `GD` extension (for image manipulation and QR codes)
-  - `mysqli` extension (for database connectivity)
   - `mbstring` extension (for string handling)
   - `json` extension (for JSON operations)
 - **Composer** (for installing QR code dependencies)
+
+> **Note:** This project uses **file-based storage** (no database required). All data is stored in directories and JSON files.
 
 ### Recommended Specifications
 
@@ -231,20 +231,12 @@ chmod -R 755 uploads/
 chmod -R 755 thumbnails/
 chmod -R 755 cache/
 chmod -R 755 logs/
+chmod -R 755 img/
+chmod -R 755 shares/
+chmod -R 755 links/
 ```
 
-### Step 6: Database Setup
-
-Create a MySQL database and user:
-
-```sql
-CREATE DATABASE serenity_share;
-CREATE USER 'serenity_user'@'localhost' IDENTIFIED BY 'your_secure_password';
-GRANT ALL PRIVILEGES ON serenity_share.* TO 'serenity_user'@'localhost';
-FLUSH PRIVILEGES;
-```
-
-Update database credentials in `config.php`.
+> **Note:** No database setup required! Serenity Share uses file-based storage. All files and metadata are stored in directories and JSON files.
 
 ---
 
@@ -408,11 +400,7 @@ For more detailed setup instructions, see [Discord Webhook Setup Guide](docs/dis
 6. **File Permissions**
    - Set appropriate file permissions (755 for directories, 644 for files)
    - Don't expose sensitive files publicly
-
-7. **Database Security**
-   - Use strong database passwords
-   - Limit database user privileges
-   - Regularly backup your database
+   - Ensure upload directories are writable but not executable
 
 ### Security Checklist
 
@@ -422,7 +410,6 @@ For more detailed setup instructions, see [Discord Webhook Setup Guide](docs/dis
 - [ ] Enabled HTTPS
 - [ ] Set proper file permissions
 - [ ] Updated PHP to latest version
-- [ ] Secured database credentials
 - [ ] Enabled firewall rules
 - [ ] Regular backups configured
 
@@ -468,26 +455,18 @@ For more detailed setup instructions, see [Discord Webhook Setup Guide](docs/dis
 3. Clear browser cache and cookies
 4. Check server error logs
 5. Verify `.htaccess` is working correctly
+6. Ensure `ip_whitelist_enabled` is set to `false` if you want to disable IP restrictions
 
-#### Database Connection Errors
+#### File Storage Issues
 
-**Problem:** Database connection fails.
+**Problem:** Files not saving or metadata not persisting.
 
 **Solutions:**
-1. Verify database credentials in `config.php`
-2. Check database server is running
-3. Verify database user has proper permissions
-4. Check firewall rules allow database connections
-5. Test connection with:
-   ```php
-   <?php
-   $conn = new mysqli('host', 'user', 'pass', 'db');
-   if ($conn->connect_error) {
-       die("Connection failed: " . $conn->connect_error);
-   }
-   echo "Connected successfully";
-   ?>
-   ```
+1. Check directory permissions (directories must be writable)
+2. Verify disk space is available
+3. Check that `img/`, `shares/`, and `links/` directories exist
+4. Review error logs in `logs/` directory
+5. Ensure PHP has write permissions to these directories
 
 #### Discord Notifications Not Working
 
