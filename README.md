@@ -1,130 +1,662 @@
-# Serenity Share
+<div align="center">
 
-A free, open source, self-hosted file and image sharing solution with ShareX integration. Built with functionality in mind - easy to deploy on any web host.
+# 🎨 Serenity Share
 
-> **Note:** This project prioritizes functionality over perfect code architecture. While it works reliably, the implementation may not follow all best practices. Contributions and improvements are welcome!
+**A free, open-source, self-hosted file and image sharing solution with ShareX integration**
 
-## Screenshots
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PHP Version](https://img.shields.io/badge/PHP-8.1%2B-blue.svg)](https://www.php.net/)
+[![MySQL](https://img.shields.io/badge/MySQL-5.7%2B-orange.svg)](https://www.mysql.com/)
+[![Status](https://img.shields.io/badge/Status-Active-success.svg)](https://github.com)
 
+*Built with functionality in mind - easy to deploy on any web host*
+
+[Features](#-features) • [Installation](#-installation) • [Configuration](#-configuration) • [Documentation](#-documentation) • [Contributing](#-contributing)
+
+---
+
+</div>
+
+## 📋 Table of Contents
+
+- [Overview](#-overview)
+- [Features](#-features)
+- [Screenshots](#-screenshots)
+- [Requirements](#-requirements)
+- [Quick Start](#-quick-start)
+- [Installation](#-installation)
+- [Configuration](#-configuration)
+- [ShareX Integration](#-sharex-integration)
+- [Discord Notifications](#-discord-notifications)
+- [Security](#-security)
+- [Troubleshooting](#-troubleshooting)
+- [Documentation](#-documentation)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Credits](#-credits)
+- [Support](#-support)
+
+---
+
+## 🎯 Overview
+
+**Serenity Share** is a powerful, self-hosted file and image sharing platform designed for individuals and teams who want complete control over their file sharing infrastructure. With seamless ShareX integration, beautiful gallery views, and advanced features like password protection and expiring links, Serenity Share provides a professional solution without the complexity.
+
+> **⚠️ Note:** This project prioritizes functionality over perfect code architecture. While it works reliably, the implementation may not follow all best practices. Contributions and improvements are welcome!
+
+### Why Serenity Share?
+
+- 🚀 **Easy Deployment** - Get up and running in minutes on any PHP-enabled web host
+- 🔒 **Privacy First** - Self-hosted means your files never leave your server
+- 🎨 **Beautiful UI** - Modern, responsive design with dark theme
+- ⚡ **Fast & Lightweight** - Optimized for performance
+- 🔧 **Highly Customizable** - Extensive configuration options
+- 🌍 **Multi-language Support** - Available in 9 languages
+
+---
+
+## ✨ Features
+
+### Core Features
+
+| Feature | Description |
+|---------|-------------|
+| 🖼️ **Image Gallery** | Browse and manage uploaded images through a beautiful, responsive gallery interface |
+| 📤 **ShareX Integration** | Ready-to-use configuration for ShareX with quick screenshot and file uploads |
+| 🔒 **Password Protection** | Secure your uploads with optional password protection |
+| ⏱️ **Expiring Links** | Set expiration times for sensitive file sharing |
+| 📦 **ZIP Downloads** | Download multiple files as a ZIP archive |
+| 🎨 **QR Code Generation** | Generate QR codes for easy file sharing |
+| 📊 **Admin Dashboard** | Comprehensive admin panel for file management |
+| 📝 **Access Logs** | Track file access and view statistics |
+| 🌍 **Multi-language** | Support for 9 languages (EN, DE, ES, FR, IT, JA, KO, PT, RU, ZH) |
+
+### Advanced Features
+
+- 💬 **Discord Notifications** - Real-time notifications in Discord when files are uploaded
+- 🔗 **URL Shortening** - Built-in URL shortening functionality
+- 🖼️ **Image Thumbnails** - Automatic thumbnail generation for images
+- 📱 **Mobile Responsive** - Works seamlessly on all devices
+- 🎯 **Device Detection** - Automatically detect and log device information
+- 🔄 **Backup System** - Automated backup functionality
+- ⚡ **Caching System** - Performance optimization through caching
+
+---
+
+## 📸 Screenshots
+
+<div align="center">
+
+### Dashboard
 ![Dashboard](assets/images/dash.png)
 
+### File Sharing Interface
 ![File Sharing](assets/images/share.png)
 
+### Gallery View
 ![Gallery View](assets/images/gallery.png)
 
+### Discord Notifications
 ![Discord Notifications](assets/images/Discord_JmpQF3inS7.png)
 
-## Features
+</div>
 
-- 🖼️ Image Gallery - Browse and manage uploaded images through a beautiful gallery interface
-- 📤 ShareX Integration - Ready to use with ShareX for quick screenshot and file uploads
-- 🔒 Password Protection - Secure your uploads with optional password protection
-- ⏱️ Expiring Links - Set expiration times for sensitive file sharing
-- 📦 ZIP Downloads - Download multiple files as a ZIP archive
-- 🚀 Easy Deployment - Simple installation process on any PHP-enabled web host
-- 💬 Discord Notifications - Get real-time notifications in Discord when files are uploaded
+---
 
-## Quick Start
+## 📦 Requirements
 
-1. **Download ALL files** from GitHub (including the `vendor` folder - this is required for QR codes!)
-2. Upload everything to your web server (drag and drop works if you include the `vendor` folder)
-3. Edit `config.php` with your domain and settings
-4. Generate a password hash using `yourdomain/hash_password.php`
-5. Update the admin password in `config.php` with the generated hash
-6. Access `/admin.php` to manage your files
-7. Import `EDIT_BEFORE_LOADING.sxcu` into ShareX
-8. Start uploading!
+### Server Requirements
 
-**Important:** The `vendor` folder must be included when downloading/uploading files. If QR codes don't work, visit `check_qr_setup.php` to diagnose the issue.
+- **PHP** 8.1 or higher (required for QR code generation)
+- **MySQL** 5.7+ or **MariaDB** 10.3+
+- **Web Server** (Apache/Nginx)
+- **PHP Extensions:**
+  - `GD` extension (for image manipulation and QR codes)
+  - `mysqli` extension (for database connectivity)
+  - `mbstring` extension (for string handling)
+  - `json` extension (for JSON operations)
+- **Composer** (for installing QR code dependencies)
 
-## Requirements
+### Recommended Specifications
 
-- PHP 8.1 or higher (required for QR code generation)
-- MySQL 5.7+ or MariaDB 10.3+
-- Web server (Apache/Nginx)
-- PHP GD extension (for image manipulation and QR codes)
-- Composer (for installing QR code dependencies)
-- Minimum 1GB RAM (2GB recommended)
-- DirectAdmin compatible (recommended)
+- **RAM:** Minimum 1GB (2GB recommended)
+- **Storage:** Depends on your file upload needs
+- **Control Panel:** DirectAdmin compatible (recommended)
 
-## Installation
+### Browser Support
 
-1. Download or clone this repository to your web server
-2. **Install Composer dependencies** (required for QR code feature):
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (latest)
+- Opera (latest)
+
+---
+
+## 🚀 Quick Start
+
+Get Serenity Share up and running in 5 minutes:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/yourusername/Serenity-Share.git
+cd Serenity-Share
+
+# 2. Install Composer dependencies
+composer install
+
+# 3. Configure your settings
+# Edit config.php with your domain and settings
+
+# 4. Generate admin password hash
+# Visit: yourdomain.com/hash_password.php
+
+# 5. Update config.php with the generated hash
+
+# 6. Access admin panel
+# Visit: yourdomain.com/admin.php
+```
+
+> **⚠️ Important:** The `vendor` folder must be included when downloading/uploading files. If QR codes don't work, visit `check_qr_setup.php` to diagnose the issue.
+
+---
+
+## 📥 Installation
+
+### Step 1: Download Files
+
+**Option A: Using Git**
+```bash
+git clone https://github.com/RagnarTheGreat/Serenity-Share.git
+cd Serenity-Share
+```
+
+**Option B: Manual Download**
+- Download ALL files from GitHub (including the `vendor` folder - this is required for QR codes!)
+- Extract the archive to your desired location
+
+### Step 2: Install Dependencies
+
+Install Composer dependencies (required for QR code feature):
+
+```bash
+composer install
+```
+
+> **Note:** If you don't have Composer installed, download it from [getcomposer.org](https://getcomposer.org/download/)
+
+### Step 3: Upload to Server
+
+Upload all files to your web server. You can use:
+- FTP/SFTP client (FileZilla, WinSCP, etc.)
+- cPanel File Manager
+- DirectAdmin File Manager
+- SSH/SCP
+
+**Important:** Ensure the `vendor` folder is included in the upload!
+
+### Step 4: Configure Web Server
+
+#### Apache Configuration
+
+Ensure `.htaccess` is enabled and mod_rewrite is active:
+
+```apache
+# .htaccess should already be included
+# Make sure mod_rewrite is enabled
+```
+
+#### Nginx Configuration
+
+Add the following to your Nginx server block:
+
+```nginx
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}
+
+location ~ \.php$ {
+    fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+    fastcgi_index index.php;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+}
+```
+
+### Step 5: Set Permissions
+
+Make sure upload directories are writable:
+
+```bash
+chmod -R 755 uploads/
+chmod -R 755 thumbnails/
+chmod -R 755 cache/
+chmod -R 755 logs/
+```
+
+### Step 6: Database Setup
+
+Create a MySQL database and user:
+
+```sql
+CREATE DATABASE serenity_share;
+CREATE USER 'serenity_user'@'localhost' IDENTIFIED BY 'your_secure_password';
+GRANT ALL PRIVILEGES ON serenity_share.* TO 'serenity_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+Update database credentials in `config.php`.
+
+---
+
+## ⚙️ Configuration
+
+### Basic Configuration
+
+Edit `config.php` with your specific settings:
+
+```php
+<?php
+return [
+    // Domain Configuration
+    'domain_url' => 'https://yourdomain.com',
+    
+    // Security
+    'secret_key' => 'your-secure-random-string-here', // Generate a strong random string
+    'admin_password' => 'your-hashed-password', // Use hash_password.php to generate
+    
+    // Admin Access
+    'admin_ips' => ['127.0.0.1', 'your.ip.address'], // Restrict admin access by IP
+    
+    // File Upload Settings
+    'max_file_size' => 100 * 1024 * 1024, // 100MB
+    'allowed_extensions' => ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'zip'],
+    
+    // Discord Notifications
+    'discord_webhook_url' => 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL',
+    'discord_notifications' => true,
+];
+```
+
+### Generate Admin Password Hash
+
+1. Visit `yourdomain.com/hash_password.php`
+2. Enter your desired password
+3. Copy the generated hash
+4. Update `admin_password` in `config.php`
+
+### Security Configuration
+
+**Important Security Settings:**
+
+```php
+// Generate a strong secret key (32+ characters)
+'secret_key' => bin2hex(random_bytes(32)),
+
+// Restrict admin access by IP
+'admin_ips' => ['your.ip.address.here'],
+
+// Enable HTTPS only
+'force_https' => true,
+```
+
+---
+
+## 📤 ShareX Integration
+
+### Setup Instructions
+
+1. **Edit Configuration File:**
+   - Open `EDIT_BEFORE_LOADING.sxcu` in any text editor
+   - Replace `YOUR_DOMAIN` with your actual domain
+   - Update any other settings as needed
+
+2. **Import into ShareX:**
+   - Open ShareX
+   - Go to **Destinations** → **Custom uploader settings**
+   - Click **Import** and select `EDIT_BEFORE_LOADING.sxcu`
+   - Configure as your default uploader
+
+3. **Test Upload:**
+   - Take a screenshot or upload a file
+   - Verify it appears in your gallery
+
+### ShareX Configuration File Structure
+
+```json
+{
+  "Version": "14.1.0",
+  "Name": "Serenity Share",
+  "DestinationType": "ImageUploader, FileUploader",
+  "RequestMethod": "POST",
+  "RequestURL": "https://yourdomain.com/upload.php",
+  "Body": "MultipartFormData",
+  "FileFormName": "file",
+  "URL": "$json:url$",
+  "ThumbnailURL": "$json:thumbnail$"
+}
+```
+
+---
+
+## 💬 Discord Notifications
+
+Get real-time notifications in Discord whenever someone uploads a file to your server!
+
+### Setup Steps
+
+#### 1. Create a Discord Webhook
+
+1. Go to your Discord server
+2. Right-click on the channel where you want notifications
+3. Select **Edit Channel** → **Integrations** → **Webhooks**
+4. Click **Create Webhook**
+5. Copy the webhook URL
+
+#### 2. Configure in config.php
+
+```php
+'discord_webhook_url' => 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL_HERE',
+'discord_notifications' => true, // Set to true to enable notifications
+```
+
+#### 3. Features
+
+- 🎨 **Rich Embeds** - Beautiful embeds with file information
+- 🖼️ **Image Previews** - Automatic image previews for uploaded images
+- 📊 **File Details** - File size, type, and device detection
+- 🎯 **Color Coding** - Color-coded by file type (green for images, red for videos)
+- 📱 **Device Detection** - Mobile/Desktop detection
+- ⏰ **Timestamps** - Automatic timestamping
+- 🔗 **Direct Links** - Direct links to uploaded files
+
+#### 4. Disable Notifications
+
+To disable Discord notifications, set:
+
+```php
+'discord_notifications' => false
+```
+
+For more detailed setup instructions, see [Discord Webhook Setup Guide](docs/discord-webhook-setup.md).
+
+---
+
+## 🔒 Security
+
+### Security Best Practices
+
+1. **Change Default Password**
+   - Immediately change the default admin password
+   - Use `hash_password.php` to generate a secure hash
+
+2. **Secure Secret Key**
+   - Generate a strong, unique value for `secret_key` in config.php
+   - Use at least 32 random characters
+
+3. **IP Restriction**
+   - Restrict access to the admin area by IP address
+   - Add your IP to `admin_ips` in config.php
+
+4. **HTTPS Only**
+   - Always use HTTPS for production deployments
+   - Configure SSL/TLS certificates properly
+
+5. **Keep Updated**
+   - Keep your server and PHP version up to date
+   - Regularly update dependencies via Composer
+
+6. **File Permissions**
+   - Set appropriate file permissions (755 for directories, 644 for files)
+   - Don't expose sensitive files publicly
+
+7. **Database Security**
+   - Use strong database passwords
+   - Limit database user privileges
+   - Regularly backup your database
+
+### Security Checklist
+
+- [ ] Changed default admin password
+- [ ] Generated secure `secret_key`
+- [ ] Configured IP restrictions for admin area
+- [ ] Enabled HTTPS
+- [ ] Set proper file permissions
+- [ ] Updated PHP to latest version
+- [ ] Secured database credentials
+- [ ] Enabled firewall rules
+- [ ] Regular backups configured
+
+---
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+#### QR Codes Not Working
+
+**Problem:** QR codes are not generating or displaying.
+
+**Solutions:**
+1. Ensure `vendor` folder is uploaded to your server
+2. Run `composer install` to install dependencies
+3. Verify PHP 8.1+ is installed
+4. Check that GD extension is enabled:
    ```bash
-   composer install
+   php -m | grep -i gd
    ```
-   If you don't have Composer, install it from https://getcomposer.org/download/
-3. Configure your web server to serve the files
-4. Edit `config.php` with your specific settings:
-   - Update `domain_url` to point to your domain
-   - Set a secure random string for `secret_key`
-   - Change the admin password (default is "password") using yourdomain/hash_password.php
-   - Add your IP to `admin_ips` for admin area access
-5. Make sure upload directories are writable by your web server
-6. Access your site and login to the admin area at `/admin.php`
+5. Visit `check_qr_setup.php` to diagnose the issue
+6. Check file permissions on cache directory
 
-**Note:** If QR codes are not working, make sure you've run `composer install` and that PHP 8.1+ is installed with the GD extension enabled.
+#### Upload Fails
 
-## Discord Notifications Setup
+**Problem:** Files are not uploading.
 
-Get notified in Discord whenever someone uploads a file to your server!
+**Solutions:**
+1. Check PHP `upload_max_filesize` and `post_max_size` in `php.ini`
+2. Verify directory permissions (uploads folder must be writable)
+3. Check disk space on server
+4. Review error logs in `logs/` directory
+5. Verify file extensions are allowed in `config.php`
 
-### Setup Steps:
+#### Admin Panel Not Accessible
 
-1. **Create a Discord Webhook:**
-   - Go to your Discord server
-   - Right-click on the channel where you want notifications
-   - Select "Edit Channel" → "Integrations" → "Webhooks"
-   - Click "Create Webhook" and copy the webhook URL
+**Problem:** Cannot access admin panel.
 
-2. **Configure in config.php:**
+**Solutions:**
+1. Verify your IP is in `admin_ips` array in `config.php`
+2. Check admin password is correctly hashed
+3. Clear browser cache and cookies
+4. Check server error logs
+5. Verify `.htaccess` is working correctly
+
+#### Database Connection Errors
+
+**Problem:** Database connection fails.
+
+**Solutions:**
+1. Verify database credentials in `config.php`
+2. Check database server is running
+3. Verify database user has proper permissions
+4. Check firewall rules allow database connections
+5. Test connection with:
    ```php
-   'discord_webhook_url' => 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL_HERE',
-   'discord_notifications' => true // Set to true to enable notifications
+   <?php
+   $conn = new mysqli('host', 'user', 'pass', 'db');
+   if ($conn->connect_error) {
+       die("Connection failed: " . $conn->connect_error);
+   }
+   echo "Connected successfully";
+   ?>
    ```
 
-3. **Features:**
-   - 🎨 Rich embeds with file information
-   - 🖼️ Image previews for uploaded images
-   - 📊 File size, type, and device detection
-   - 🎯 Color-coded by file type (green for images, red for videos)
-   - 📱 Mobile/Desktop detection
-   - ⏰ Timestamps
-   - 🔗 Direct links to uploaded files
+#### Discord Notifications Not Working
 
-### To disable Discord notifications:
-Set `'discord_notifications' => false` in config.php
+**Problem:** Discord webhook not sending notifications.
 
-## ShareX Configuration
+**Solutions:**
+1. Verify webhook URL is correct in `config.php`
+2. Check `discord_notifications` is set to `true`
+3. Test webhook manually using `test_webhook.php`
+4. Check Discord server logs
+5. Verify webhook hasn't been deleted or expired
 
-1. Open the EDIT_BEFORE_LOADING.sxcu in any text editer and config to you
-2. Import it into ShareX
-3. Done
+### Getting Help
 
-## Security Notes
+If you're still experiencing issues:
 
-- Change the default admin password immediately
-- Set a strong, unique value for `secret_key` in config.php
-- Keep your server and PHP version up to date
-- Use HTTPS for all production deployments
-- Restrict access to the admin area by IP
+1. Check the [Issues](https://github.com/yourusername/Serenity-Share/issues) page
+2. Review server error logs
+3. Join our [Discord Server](https://discord.gg/9t2pKpwn2g) for support
+4. Create a new issue with:
+   - PHP version
+   - Server configuration
+   - Error messages
+   - Steps to reproduce
 
-## License
+---
 
-This project is free and open source software. You are free to use, modify and distribute it under the terms of the MIT License.
+## 📚 Documentation
 
-## Credits
+Additional documentation is available in the `docs/` directory:
 
-This project uses the following libraries:
+- [Discord Webhook Setup](docs/discord-webhook-setup.md)
+- [Password Hash Guide](docs/password-hash-guide.md)
+- [Installation Guide](INSTALL.md)
 
-- Font Awesome for icons
-- SweetAlert2 for improved UI dialogs
-- ParticlesJS for the background animation
+### API Documentation
 
-## Contributing
+For developers looking to integrate with Serenity Share:
 
-Contributions are welcome! Feel free to submit issues or pull requests.
+- **Upload Endpoint:** `POST /upload.php`
+- **Gallery API:** `GET /gallery.php`
+- **Admin API:** `GET /admin.php`
 
+---
 
-any issues or suggestions feel free to join the dicord https://discord.gg/9t2pKpwn2g
+## 🤝 Contributing
+
+Contributions are welcome and greatly appreciated! Here's how you can help:
+
+### Ways to Contribute
+
+- 🐛 **Report Bugs** - Found a bug? Open an issue!
+- 💡 **Suggest Features** - Have an idea? Share it with us!
+- 📝 **Improve Documentation** - Help make the docs better
+- 🔧 **Submit Pull Requests** - Fix bugs or add features
+- 🌍 **Translate** - Help translate to more languages
+- ⭐ **Star the Project** - Show your support!
+
+### Contribution Guidelines
+
+1. **Fork the Repository**
+   ```bash
+   git clone https://github.com/yourusername/Serenity-Share.git
+   cd Serenity-Share
+   ```
+
+2. **Create a Feature Branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+
+3. **Make Your Changes**
+   - Follow existing code style
+   - Add comments for complex logic
+   - Test your changes thoroughly
+
+4. **Commit Your Changes**
+   ```bash
+   git commit -m "Add amazing feature"
+   ```
+
+5. **Push to Your Fork**
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+
+6. **Open a Pull Request**
+   - Provide a clear description
+   - Reference any related issues
+   - Include screenshots if applicable
+
+### Code Style
+
+- Follow PSR-12 coding standards
+- Use meaningful variable names
+- Add comments for complex functions
+- Keep functions focused and small
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+```
+MIT License
+
+Copyright (c) 2024 Serenity Share
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+---
+
+## 🙏 Credits
+
+### Libraries & Frameworks
+
+This project uses the following open-source libraries:
+
+- **[Font Awesome](https://fontawesome.com/)** - Icon library
+- **[SweetAlert2](https://sweetalert2.github.io/)** - Beautiful, responsive, customizable popup dialogs
+- **[Particles.js](https://vincentgarreau.com/particles.js/)** - Lightweight JavaScript library for creating particles
+- **[Endroid QR Code](https://github.com/endroid/qr-code)** - QR code generation library
+
+### Special Thanks
+
+- All contributors who have helped improve this project
+- The open-source community for inspiration and support
+
+---
+
+## 💬 Support
+
+### Get Help
+
+- 📖 **Documentation** - Check the docs in the `docs/` folder
+- 🐛 **Issues** - Report bugs on [GitHub Issues](https://github.com/yourusername/Serenity-Share/issues)
+- 💬 **Discord** - Join our [Discord Server](https://discord.gg/9t2pKpwn2g) for support and discussions
+- 📧 **Email** - Contact us for enterprise support
+
+### Community
+
+- ⭐ **Star us on GitHub** - Show your support!
+- 🍴 **Fork the repository** - Make your own version
+- 📢 **Share with others** - Help spread the word!
+
+---
+
+<div align="center">
+
+**Made with ❤️ by the Serenity Share community**
+
+[⬆ Back to Top](#-serenity-share)
+
+</div>
