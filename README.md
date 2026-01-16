@@ -55,6 +55,82 @@
 
 ---
 
+## 🔧 How It Works
+
+### File Upload Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant ShareX/Web as ShareX/Web Interface
+    participant Server
+    participant FileSystem
+    participant Discord as Discord Webhook
+
+    User->>ShareX/Web: Upload File/Screenshot
+    ShareX/Web->>Server: POST /upload.php (file + secret_key)
+    
+    Server->>Server: Validate secret key
+    Server->>Server: Check file type & size
+    Server->>Server: Generate unique filename
+    
+    Server->>FileSystem: Save file to img/ directory
+    FileSystem-->>Server: File saved successfully
+    
+    Server->>Server: Generate thumbnail (if image)
+    Server->>Server: Create QR code (optional)
+    
+    alt Discord Notifications Enabled
+        Server->>Discord: Send notification with file info
+        Discord-->>Server: Notification sent
+    end
+    
+    Server->>Server: Log access & metadata
+    Server-->>ShareX/Web: Return file URL + metadata
+    ShareX/Web-->>User: Display shareable link
+```
+
+### File Sharing Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Web as Web Interface
+    participant Server
+    participant FileSystem
+    participant Recipient
+
+    User->>Web: Select files & set options
+    Web->>Server: POST /share.php (files + password + expiry)
+    
+    Server->>Server: Generate unique share ID
+    Server->>FileSystem: Create share directory
+    Server->>FileSystem: Save files to shares/{shareId}/
+    Server->>FileSystem: Store metadata (JSON)
+    
+    FileSystem-->>Server: Share created
+    Server-->>Web: Return share URL
+    Web-->>User: Display share link
+    
+    User->>Recipient: Share link via email/message
+    Recipient->>Server: GET /public_share.php?share={shareId}
+    
+    Server->>Server: Validate share & check expiry
+    Server->>Server: Check password (if required)
+    
+    alt Password Required
+        Server-->>Recipient: Request password
+        Recipient->>Server: Submit password
+        Server->>Server: Verify password
+    end
+    
+    Server->>FileSystem: Retrieve files
+    FileSystem-->>Server: Return files
+    Server-->>Recipient: Display download options
+```
+
+---
+
 ## ✨ Features
 
 ### Core Features
@@ -138,7 +214,7 @@ Get Serenity Share up and running in 5 minutes:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/Serenity-Share.git
+git clone https://github.com/ragnarthegreat/Serenity-Share.git
 cd Serenity-Share
 
 # 2. Install Composer dependencies
@@ -483,7 +559,7 @@ For more detailed setup instructions, see [Discord Webhook Setup Guide](docs/dis
 
 If you're still experiencing issues:
 
-1. Check the [Issues](https://github.com/yourusername/Serenity-Share/issues) page
+1. Check the [Issues](https://github.com/ragnarthegreat/Serenity-Share/issues) page
 2. Review server error logs
 3. Join our [Discord Server](https://discord.gg/9t2pKpwn2g) for support
 4. Create a new issue with:
@@ -529,7 +605,7 @@ Contributions are welcome and greatly appreciated! Here's how you can help:
 
 1. **Fork the Repository**
    ```bash
-   git clone https://github.com/yourusername/Serenity-Share.git
+   git clone https://github.com/ragnarthegreat/Serenity-Share.git
    cd Serenity-Share
    ```
 
@@ -620,7 +696,7 @@ This project uses the following open-source libraries:
 ### Get Help
 
 - 📖 **Documentation** - Check the docs in the `docs/` folder
-- 🐛 **Issues** - Report bugs on [GitHub Issues](https://github.com/yourusername/Serenity-Share/issues)
+- 🐛 **Issues** - Report bugs on [GitHub Issues](https://github.com/ragnarthegreat/Serenity-Share/issues)
 - 💬 **Discord** - Join our [Discord Server](https://discord.gg/9t2pKpwn2g) for support and discussions
 - 📧 **Email** - Contact us for enterprise support
 
