@@ -388,6 +388,78 @@ function copyQRUrl() {
     }
 }
 
+// Auto Delete modal
+let autoDeleteCurrentFilename = null;
+
+function showAutoDeleteModal(filename) {
+    autoDeleteCurrentFilename = filename;
+    const modal = document.getElementById("auto-delete-modal");
+    const overlay = document.getElementById("auto-delete-modal-overlay");
+    const titleEl = document.getElementById("auto-delete-modal-title");
+    const filenameEl = document.getElementById("auto-delete-filename");
+    if (!modal || !overlay) return;
+    titleEl.textContent = "Set auto-delete";
+    filenameEl.textContent = filename;
+    modal.style.display = "block";
+    overlay.style.display = "block";
+    document.querySelectorAll(".auto-delete-presets .button-preset").forEach(btn => btn.classList.remove("selected"));
+}
+
+function hideAutoDeleteModal() {
+    const modal = document.getElementById("auto-delete-modal");
+    const overlay = document.getElementById("auto-delete-modal-overlay");
+    if (modal) modal.style.display = "none";
+    if (overlay) overlay.style.display = "none";
+    autoDeleteCurrentFilename = null;
+}
+
+function setAutoDelete(durationSeconds) {
+    if (!autoDeleteCurrentFilename) return;
+    const csrfInput = document.querySelector('input[name="csrf_token"]');
+    const csrfToken = csrfInput ? csrfInput.value : '';
+    const formData = new FormData();
+    formData.append("csrf_token", csrfToken);
+    formData.append("filename", autoDeleteCurrentFilename);
+    formData.append("duration_seconds", String(durationSeconds));
+    fetch("set_auto_delete.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast("Auto-delete scheduled. File will be removed after the chosen time.", "success");
+            hideAutoDeleteModal();
+            location.reload();
+        } else {
+            showToast(data.error || "Failed to set auto-delete", "error");
+        }
+    })
+    .catch(err => {
+        showToast("Failed to set auto-delete: " + err.message, "error");
+    });
+}
+
+function initAutoDeleteModal() {
+    document.querySelectorAll(".auto-delete-presets .button-preset").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const seconds = parseInt(this.getAttribute("data-seconds"), 10);
+            document.querySelectorAll(".auto-delete-presets .button-preset").forEach(b => b.classList.remove("selected"));
+            this.classList.add("selected");
+            setAutoDelete(seconds);
+        });
+    });
+    const customSet = document.getElementById("auto-delete-custom-set");
+    if (customSet) {
+        customSet.addEventListener("click", function() {
+            const amount = parseInt(document.getElementById("auto-delete-custom-amount").value, 10) || 1;
+            const unit = parseInt(document.getElementById("auto-delete-custom-unit").value, 10);
+            const seconds = Math.max(1, amount * unit);
+            setAutoDelete(seconds);
+        });
+    }
+}
+
 // Explicitly attach all functions to window object to ensure global access
 window.toggleAll = toggleAll;
 window.updateDeleteButton = updateDeleteButton;
@@ -405,6 +477,8 @@ window.initPagination = initPagination;
 window.showQRCode = showQRCode;
 window.hideQRCode = hideQRCode;
 window.copyQRUrl = copyQRUrl;
+window.showAutoDeleteModal = showAutoDeleteModal;
+window.hideAutoDeleteModal = hideAutoDeleteModal;
 
 // Initialize on page load - wait for everything to be fully loaded
 (function() {
@@ -457,6 +531,9 @@ window.copyQRUrl = copyQRUrl;
                 
                 if (typeof initPagination === 'function') {
                     initPagination();
+                }
+                if (typeof initAutoDeleteModal === 'function') {
+                    initAutoDeleteModal();
                 }
             } catch (error) {
                 console.error('Error initializing gallery:', error);
