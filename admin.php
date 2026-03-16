@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 
 require_once('config.php');
 require_once('includes/utilities.php');
+require_once('includes/auto_delete_cleanup.php');
 require_once('includes/session.php');
 
 // Initialize secure session first
