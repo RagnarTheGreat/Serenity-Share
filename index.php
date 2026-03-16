@@ -1,3 +1,4 @@
+<?php require_once('includes/auto_delete_cleanup.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
