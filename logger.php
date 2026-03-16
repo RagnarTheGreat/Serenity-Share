@@ -1,7 +1,7 @@
 <?php
 require_once('config.php');
 require_once('includes/utilities.php');
-
+require_once('includes/auto_delete_cleanup.php');
 
 if ($config['debug']) {
     error_reporting(E_ALL);
