@@ -110,7 +110,7 @@ Schedule files to be automatically removed from the server after a set time—us
 4. Choose a preset (**1 hour**, **24 hours**, **7 days**, **30 days**) or enter a **custom** duration (e.g. 5 hours, 3 days)
 5. The file will be deleted from the server when the time is up
 
-Scheduled deletions run whenever the gallery page is loaded, so the file is removed on the next visit after the delay. No cron job is required.
+Scheduled deletions run **on every page load** across the site (homepage, share page, admin, gallery, uploads, short links). As soon as the delay has passed, the file is removed the next time anyone visits any part of your site. No cron job is required.
 
 ## ShareX Configuration
 
