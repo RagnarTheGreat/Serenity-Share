@@ -8,6 +8,9 @@ require_once('includes/utilities.php');
 require_once('includes/session.php');
 require_once('templates/error.php');
 
+// Increase execution time limit for gallery page (may need to process many thumbnails)
+set_time_limit(120); // 2 minutes
+
 // Add this to debug
 error_log("Gallery.php started");
 
@@ -82,6 +85,16 @@ if (!is_dir(THUMBNAILS_DIR)) {
 if (!is_writable(THUMBNAILS_DIR)) {
     showError(500, 'Configuration Error', 'Thumbnails directory is not writable');
     exit;
+}
+
+// Run scheduled auto-deletions (files that were set to delete after a delay)
+if (!empty($config['auto_delete_schedule_file'])) {
+    runAutoDeleteCleanup($config['upload_dir'], THUMBNAILS_DIR, $config['auto_delete_schedule_file']);
+}
+
+// Ensure CSRF token exists for forms
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
 // Check IP whitelist if enabled in config
@@ -301,6 +314,40 @@ if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
     </div>
     <div id="qr-modal-overlay" class="qr-modal-overlay" style="display: none;" onclick="hideQRCode()"></div>
 
+    <!-- Auto Delete Modal -->
+    <div id="auto-delete-modal" class="auto-delete-modal qr-modal" style="display: none;">
+        <div class="qr-modal-content">
+            <div class="qr-modal-header">
+                <h3 id="auto-delete-modal-title">Set auto-delete</h3>
+                <button class="qr-modal-close" onclick="hideAutoDeleteModal()">&times;</button>
+            </div>
+            <div class="qr-modal-body">
+                <p class="auto-delete-filename" id="auto-delete-filename"></p>
+                <p class="auto-delete-hint">Delete this file from the server after:</p>
+                <div class="auto-delete-presets">
+                    <button type="button" class="button button-preset" data-seconds="3600">1 hour</button>
+                    <button type="button" class="button button-preset" data-seconds="86400">24 hours</button>
+                    <button type="button" class="button button-preset" data-seconds="604800">7 days</button>
+                    <button type="button" class="button button-preset" data-seconds="2592000">30 days</button>
+                </div>
+                <div class="auto-delete-custom">
+                    <label for="auto-delete-custom-amount">Custom:</label>
+                    <input type="number" id="auto-delete-custom-amount" min="1" max="365" value="1" class="auto-delete-input">
+                    <select id="auto-delete-custom-unit" class="auto-delete-select">
+                        <option value="60">Minutes</option>
+                        <option value="3600">Hours</option>
+                        <option value="86400">Days</option>
+                    </select>
+                    <button type="button" class="button button-preset" id="auto-delete-custom-set">Set custom</button>
+                </div>
+            </div>
+            <div class="qr-modal-footer">
+                <button type="button" class="button" onclick="hideAutoDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <div id="auto-delete-modal-overlay" class="qr-modal-overlay" style="display: none;" onclick="hideAutoDeleteModal()"></div>
+
     <?php require_once('includes/navigation.php'); ?>
     <div class="container">
         <div class="page-header">
@@ -411,6 +458,9 @@ if ($end_page - $start_page + 1 < MAX_PAGINATION_LINKS) {
                             <div class="gallery-actions">
                                 <button class="button-qr" onclick="showQRCode('<?php echo htmlspecialchars($image['url'], ENT_QUOTES); ?>', '<?php echo htmlspecialchars($image['name'], ENT_QUOTES); ?>')" title="Generate QR Code">
                                     <span class="qr-icon">📱</span> QR Code
+                                </button>
+                                <button class="button-auto-delete" onclick="showAutoDeleteModal('<?php echo htmlspecialchars($image['name'], ENT_QUOTES); ?>')" title="Schedule auto-delete">
+                                    <span class="auto-delete-icon">⏱️</span> Auto Delete
                                 </button>
                             </div>
                         </div>
