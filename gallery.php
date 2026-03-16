@@ -87,10 +87,7 @@ if (!is_writable(THUMBNAILS_DIR)) {
     exit;
 }
 
-// Run scheduled auto-deletions (files that were set to delete after a delay)
-if (!empty($config['auto_delete_schedule_file'])) {
-    runAutoDeleteCleanup($config['upload_dir'], THUMBNAILS_DIR, $config['auto_delete_schedule_file']);
-}
+require_once('includes/auto_delete_cleanup.php');
 
 // Ensure CSRF token exists for forms
 if (!isset($_SESSION['csrf_token'])) {
