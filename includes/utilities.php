@@ -73,6 +73,37 @@ function deleteDirectory($dir) {
     return rmdir($dir);
 }
 
+/**
+ * Run scheduled auto-deletions: remove files whose delete_at time has passed.
+ * Returns number of files deleted.
+ */
+function runAutoDeleteCleanup($uploadDir, $thumbnailsDir, $scheduleFile) {
+    if (!file_exists($scheduleFile)) return 0;
+    $data = @json_decode(file_get_contents($scheduleFile), true);
+    if (!is_array($data)) return 0;
+    $now = time();
+    $changed = false;
+    foreach ($data as $filename => $deleteAt) {
+        if (!is_numeric($deleteAt) || (int)$deleteAt > $now) continue;
+        $filename = basename($filename);
+        $filepath = rtrim($uploadDir, '/') . '/' . $filename;
+        $thumbpath = rtrim($thumbnailsDir, '/') . '/' . $filename;
+        if (file_exists($filepath) && is_file($filepath)) {
+            @unlink($filepath);
+            $changed = true;
+        }
+        if (file_exists($thumbpath) && is_file($thumbpath)) {
+            @unlink($thumbpath);
+        }
+        unset($data[$filename]);
+        $changed = true;
+    }
+    if ($changed) {
+        file_put_contents($scheduleFile, json_encode($data, JSON_PRETTY_PRINT), LOCK_EX);
+    }
+    return $changed ? 1 : 0;
+}
+
 function formatDuration($seconds) {
     $days = floor($seconds / (24 * 60 * 60));
     $hours = floor(($seconds % (24 * 60 * 60)) / (60 * 60));
@@ -317,99 +348,166 @@ function getThumbnailUrl($filename) {
     
     // For images, check if thumbnail exists
     $thumbnailPath = THUMBNAILS_DIR . $filename;
+    $sourcePath = $config['upload_dir'] . $filename;
     
-    // If thumbnail doesn't exist, create it
+    // If thumbnail doesn't exist, try to create it
     if (!file_exists($thumbnailPath)) {
-        createThumbnail($config['upload_dir'] . $filename, $thumbnailPath);
+        // Only attempt to create thumbnail if source file exists
+        if (file_exists($sourcePath)) {
+            $created = @createThumbnail($sourcePath, $thumbnailPath);
+            // If thumbnail creation failed, return the original image URL as fallback
+            if (!$created || !file_exists($thumbnailPath)) {
+                return $config['domain_url'] . $config['upload_dir'] . $filename;
+            }
+        } else {
+            // Source file doesn't exist, return a placeholder or original URL
+            return $config['domain_url'] . 'assets/images/image-placeholder.png';
+        }
     }
     
     return $config['domain_url'] . 'thumbnails/' . $filename;
 }
 
 function createThumbnail($sourcePath, $thumbnailPath) {
+    // Increase execution time limit for this operation
+    set_time_limit(60);
+    
+    // Check if source file exists and is readable
+    if (!file_exists($sourcePath) || !is_readable($sourcePath)) {
+        return false;
+    }
+    
+    // Check file size - skip if larger than 50MB to prevent timeouts
+    if (filesize($sourcePath) > 50 * 1024 * 1024) {
+        error_log("Skipping thumbnail creation for large file: " . basename($sourcePath));
+        return false;
+    }
+    
     // Get image type
-    $imageInfo = getimagesize($sourcePath);
+    $imageInfo = @getimagesize($sourcePath);
     if (!$imageInfo) {
         return false;
     }
+    
+    // Check image dimensions - skip if too large to prevent timeouts
+    if (isset($imageInfo[0]) && isset($imageInfo[1])) {
+        $maxDimension = 10000; // Skip images larger than 10000px in any dimension
+        if ($imageInfo[0] > $maxDimension || $imageInfo[1] > $maxDimension) {
+            error_log("Skipping thumbnail creation for oversized image: " . basename($sourcePath) . " ({$imageInfo[0]}x{$imageInfo[1]})");
+            return false;
+        }
+    }
 
     // Create source image based on file type
-    switch ($imageInfo[2]) {
-        case IMAGETYPE_JPEG:
-            $source = imagecreatefromjpeg($sourcePath);
-            break;
-        case IMAGETYPE_PNG:
-            $source = imagecreatefrompng($sourcePath);
-            break;
-        case IMAGETYPE_GIF:
-            $source = imagecreatefromgif($sourcePath);
-            break;
-        default:
-            return false;
+    $source = false;
+    try {
+        switch ($imageInfo[2]) {
+            case IMAGETYPE_JPEG:
+                $source = @imagecreatefromjpeg($sourcePath);
+                break;
+            case IMAGETYPE_PNG:
+                $source = @imagecreatefrompng($sourcePath);
+                break;
+            case IMAGETYPE_GIF:
+                $source = @imagecreatefromgif($sourcePath);
+                break;
+            default:
+                return false;
+        }
+    } catch (Exception $e) {
+        error_log("Error creating image resource: " . $e->getMessage());
+        return false;
     }
 
     if (!$source) {
         return false;
     }
 
-    // Get original dimensions
-    $width = imagesx($source);
-    $height = imagesy($source);
+    try {
+        // Get original dimensions
+        $width = imagesx($source);
+        $height = imagesy($source);
+        
+        if ($width === false || $height === false) {
+            imagedestroy($source);
+            return false;
+        }
 
-    // Calculate new dimensions
-    $ratio = $width / $height;
-    if ($width > $height) {
-        $new_width = THUMBNAIL_SIZE;
-        $new_height = (int)(THUMBNAIL_SIZE / $ratio);
-    } else {
-        $new_height = THUMBNAIL_SIZE;
-        $new_width = (int)(THUMBNAIL_SIZE * $ratio);
+        // Calculate new dimensions
+        $ratio = $width / $height;
+        if ($width > $height) {
+            $new_width = THUMBNAIL_SIZE;
+            $new_height = (int)(THUMBNAIL_SIZE / $ratio);
+        } else {
+            $new_height = THUMBNAIL_SIZE;
+            $new_width = (int)(THUMBNAIL_SIZE * $ratio);
+        }
+
+        // Create new image
+        $thumbnail = @imagecreatetruecolor((int)$new_width, (int)$new_height);
+        if (!$thumbnail) {
+            imagedestroy($source);
+            return false;
+        }
+
+        // Handle transparency for PNG images
+        if ($imageInfo[2] === IMAGETYPE_PNG) {
+            imagealphablending($thumbnail, false);
+            imagesavealpha($thumbnail, true);
+            $transparent = imagecolorallocatealpha($thumbnail, 255, 255, 255, 127);
+            imagefilledrectangle($thumbnail, 0, 0, (int)$new_width, (int)$new_height, $transparent);
+        }
+
+        // Resize image
+        $resizeSuccess = @imagecopyresampled(
+            $thumbnail, $source,
+            0, 0, 0, 0,
+            (int)$new_width, (int)$new_height,
+            $width, $height
+        );
+        
+        if (!$resizeSuccess) {
+            imagedestroy($source);
+            imagedestroy($thumbnail);
+            return false;
+        }
+
+        // Create thumbnail directory if it doesn't exist
+        $thumbnailDir = dirname($thumbnailPath);
+        if (!is_dir($thumbnailDir)) {
+            @mkdir($thumbnailDir, 0755, true);
+        }
+
+        // Save thumbnail based on original image type
+        $success = false;
+        switch ($imageInfo[2]) {
+            case IMAGETYPE_JPEG:
+                $success = @imagejpeg($thumbnail, $thumbnailPath, 85);
+                break;
+            case IMAGETYPE_PNG:
+                $success = @imagepng($thumbnail, $thumbnailPath, 6);
+                break;
+            case IMAGETYPE_GIF:
+                $success = @imagegif($thumbnail, $thumbnailPath);
+                break;
+        }
+
+        // Clean up
+        imagedestroy($source);
+        imagedestroy($thumbnail);
+
+        return $success;
+    } catch (Exception $e) {
+        // Clean up on error
+        if (isset($source) && is_resource($source)) {
+            @imagedestroy($source);
+        }
+        if (isset($thumbnail) && is_resource($thumbnail)) {
+            @imagedestroy($thumbnail);
+        }
+        error_log("Error creating thumbnail: " . $e->getMessage());
+        return false;
     }
-
-    // Create new image
-    $thumbnail = imagecreatetruecolor((int)$new_width, (int)$new_height);
-
-    // Handle transparency for PNG images
-    if ($imageInfo[2] === IMAGETYPE_PNG) {
-        imagealphablending($thumbnail, false);
-        imagesavealpha($thumbnail, true);
-        $transparent = imagecolorallocatealpha($thumbnail, 255, 255, 255, 127);
-        imagefilledrectangle($thumbnail, 0, 0, (int)$new_width, (int)$new_height, $transparent);
-    }
-
-    // Resize image
-    imagecopyresampled(
-        $thumbnail, $source,
-        0, 0, 0, 0,
-        (int)$new_width, (int)$new_height,
-        $width, $height
-    );
-
-    // Create thumbnail directory if it doesn't exist
-    $thumbnailDir = dirname($thumbnailPath);
-    if (!is_dir($thumbnailDir)) {
-        mkdir($thumbnailDir, 0755, true);
-    }
-
-    // Save thumbnail based on original image type
-    $success = false;
-    switch ($imageInfo[2]) {
-        case IMAGETYPE_JPEG:
-            $success = imagejpeg($thumbnail, $thumbnailPath, 85);
-            break;
-        case IMAGETYPE_PNG:
-            $success = imagepng($thumbnail, $thumbnailPath, 6);
-            break;
-        case IMAGETYPE_GIF:
-            $success = imagegif($thumbnail, $thumbnailPath);
-            break;
-    }
-
-    // Clean up
-    imagedestroy($source);
-    imagedestroy($thumbnail);
-
-    return $success;
 }
 
 // Enhanced Discord webhook function with rich embeds
