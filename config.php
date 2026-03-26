@@ -22,7 +22,7 @@ $config = array(
     'gallery_dir' => __DIR__ . '/img/', // DO NOT TOUCH THIS
     'backup_dir' => __DIR__ . '/backups/', // DO NOT TOUCH THIS
     'discord_webhook_url' => 'https://discord.com/api/webhooks/', // Add your Discord webhook URL here
-    'discord_notifications' => true // Set to true to enable Discord notifications
+    'discord_notifications' => true, // Set to true to enable Discord notifications
     'auto_delete_schedule_file' => __DIR__ . '/logs/auto_delete_schedule.json'
 );
 
